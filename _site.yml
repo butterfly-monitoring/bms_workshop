@@ -1,11 +1,21 @@
 name: "bms-workshop"
 navbar:
-  title: "Future of Butterfly - BMS Workshop"
-  left:
+  title: "BMS Workshop"
+  right:
     - text: "Home"
+      href: index.html
+    - text: "Schedule"
       href: index.html
     - text: "WS1"
       href: example1.html
+    - text: "WS2"
+      menu:
+       - text: "Intro to data.table"
+         href: example1.html
+       - text: "flight curve borrowing strength"
+         href: example1.html
+       - text: "computing flight curve"
+         href: example1.html
 
 output_dir: "."
 exclude: ["CONTRIBUT*.md","index.md","README.md","*.db"]
