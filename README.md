@@ -1,2 +1,2 @@
 # bms_workshop
-Workshop material for online workshop about computing butterfly count indices with rbms 
+Material for computing butterfly count indices with rbms available at  https://butterfly-monitoring.github.io/bms_workshop/
