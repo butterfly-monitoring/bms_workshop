@@ -10,7 +10,7 @@ output:
 
 ## Exercice 1
 
-``` r
+``` {r figure}
 library(ggplot2)
 library(data.table)
 
