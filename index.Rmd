@@ -12,15 +12,17 @@ output:
 
 | Time         | Topic                                                                 | Instructor    |
 |--------------|-----------------------------------------------------------------------|---------------|
-|9:30  - 9:40  | login to virtual workshop (Zoom meeting)                              |               |
+|9:30  - 9:40  | login to virtual workshop (Zoom meeting)                              | David         |
 |9:40  - 10:00 | Introduction and participant presentation                             | Chris         |
 |10:00 - 11:00 | [Butterfly count data in R and data.table](example1.html)             | Reto          |
-|11:00 - 11:15 | Break                                                                 |               |
+|              | 15 minutes break                                                      |               |
 |11:15 - 12:15 | [Butterfly phenology and flight curve](example1.html)                 | Emily         |
-|12:15 - 13:20 | Lunch & login                                                         |               |
+|              | 1 hour lunch break                                                    |               |
 |13:30 - 14:30 | [Borrowing strength to compute site indices ](example1.html)          | Reto          |
-|14:45 - 15:45 | [Site indices to collated indices, trends and CI ](example1.html)     | Reto & Emily  |
-|16:00 - 16:45 | Questions from participants                                           | Reto, Emily, David & Chris |
+|              | 15 minutes break                                                      |               |
+|14:45 - 15:45 | [From site indices to collated indices, trends and CI ](example1.html)     | Reto & Emily  |
+|              | 5 minutes break                                                       |               |
+|              | 30-45 minutes Questions from participants                             | Reto, Emily, David & Chris |
 | | | |
 
 
