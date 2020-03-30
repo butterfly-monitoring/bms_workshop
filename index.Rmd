@@ -15,15 +15,15 @@ output:
 |9:30  - 9:40  | login to virtual workshop (Zoom meeting)                              | David         |
 |9:40  - 10:00 | Introduction and participant presentation                             | Chris         |
 |10:00 - 11:00 | [BMS and count data in R](example1.html)                              | Reto          |
-|              | 15 minutes break                                                      |               |
+|Break         |                                                                       |               |
 |11:15 - 12:15 | [Modelling Butterfly Abundance (GAI)](example1.html)                  | Emily         |
-|              | 1 hour lunch break                                                    |               |
+|Lunch         |                                                                       |               |
 |13:30 - 14:30 | [Flight curve & Site indices ](example1.html)                         | Reto          |
-|              | 15 minutes break                                                      |               |
+|Break         |                                                                       |               |
 |14:45 - 15:45 | [Collated indices, Trends, CI & Multi-Species Indices](example1.html) | Reto & Emily  |
-|              | 5 minutes break                                                       |               |
-|              | 30-45 minutes Questions from participants                             | Reto, Emily, David & Chris |
-| | | |
+|Break         |                                                                       |               |
+|Q&A (30 min)  |                                                                       | Reto, Emily, David & Chris |
+|              |                                                                       |               |
 
 
 Each session will be structured with a short presentation, a guided example and an exercise for participant to practice.

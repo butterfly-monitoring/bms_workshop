@@ -8,6 +8,10 @@ output:
     toc_float: true
 ---
 
+## presentation
+
+You can have a look at Emily's presentation <a href="GAI approach.pdf" target="_blank">Generalize Abundance Index presentation</a>.
+
 ## Exercice 1
 
 ``` {r figure}
