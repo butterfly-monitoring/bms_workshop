@@ -1,5 +1,5 @@
 ---
-title: "From butterfly counts to trends"
+title: "Calculating butterfly trends, indexes and indicators"
 author: "Reto Schmucki, Emily Dennis, David Roy and Chris Van Swaay"
 date: "1 April 2020"
 output:
