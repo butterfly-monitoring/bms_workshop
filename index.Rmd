@@ -1,5 +1,5 @@
 ---
-title: "Estimated Butterfly Density for Grassland Indicator"
+title: "From butterfly counts to trends"
 author: "Reto Schmucki, Emily Dennis, David Roy and Chris Van Swaay"
 date: "1 April 2020"
 output:
@@ -8,31 +8,34 @@ output:
     toc_float: true
 ---
 
-## Tentative Schedule
+### Tentative Schedule
 
 | Time         | Topic                                                                 | Instructor    |
 |--------------|-----------------------------------------------------------------------|---------------|
-|9:30  - 9:40  | login to virtual workshop (Zoom meeting)                              | David         |
+|9:30  - 9:40  | login to virtual workshop (Zoom meeting)                              |               |
 |9:40  - 10:00 | Introduction and participant presentation                             | Chris         |
 |10:00 - 11:00 | [Butterfly count data in R and data.table](example1.html)             | Reto          |
-|11:00 - 11:15 | Break                                                                 |---------------| 
+|11:00 - 11:15 | Break                                                                 |               |
 |11:15 - 12:15 | [Butterfly phenology and flight curve](example1.html)                 | Emily         |
-|12:15 - 13:20 | Lunch & login                                                         |---------------|
+|12:15 - 13:20 | Lunch & login                                                         |               |
 |13:30 - 14:30 | [Borrowing strength to compute site indices ](example1.html)          | Reto          |
 |14:45 - 15:45 | [Site indices to collated indices, trends and CI ](example1.html)     | Reto & Emily  |
-|16:00 - 16:45 | Questions from participants                                           | Reto, Emily, David & Chris  |
+|16:00 - 16:45 | Questions from participants                                           | Reto, Emily, David & Chris |
+| | | |
+
 
 Each session will be structured with a short presentation, a guided example and an exercise for participant to practice.
 
-## Before the workshop
 
-### Computer and software
+### Before the workshop
+
+#### Computer and software
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ornare quis enim malesuada tempus. Suspendisse in ligula rutrum, molestie enim at, feugiat mi. Proin commodo turpis et lobortis molestie. Sed quis scelerisque nisi. Sed fringilla hendrerit lorem, sit amet suscipit metus laoreet ac. Sed finibus lectus eget placerat gravida. Vestibulum ullamcorper justo nec mattis facilisis. Proin pharetra, dolor ut posuere aliquet, nulla mauris mattis purus, non lacinia ex lectus in sem. In placerat neque et mauris finibus fringilla. Nulla convallis, massa ac fermentum ultrices, eros metus malesuada sapien, a dapibus ante lectus eget lacus. Ut accumsan facilisis quam et volutpat. Duis aliquet consectetur justo, quis bibendum velit dignissim id. Sed vel neque quam. Duis ut ex vitae ipsum egestas euismod. Nulla neque diam, malesuada ut dolor et, tincidunt pulvinar nisi. Donec gravida quam vitae enim mattis, non tincidunt urna suscipit.
 
 Aenean a dapibus ligula, venenatis condimentum nisl. Duis a vulputate ipsum. Duis vel lorem sagittis, commodo felis a, interdum ex. Morbi ut sapien tempor sapien dapibus fermentum. Proin scelerisque imperdiet ex, sed laoreet tellus accumsan eget. Proin at tincidunt lectus, interdum aliquam velit. Pellentesque pulvinar leo in ornare sagittis. Aenean erat tellus, maximus a magna ut, faucibus ornare eros.
 
-### Reading
+#### Reading
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ornare quis enim malesuada tempus. Suspendisse in ligula rutrum, molestie enim at, feugiat mi. Proin commodo turpis et lobortis molestie. Sed quis scelerisque nisi. Sed fringilla hendrerit lorem, sit amet suscipit metus laoreet ac. Sed finibus lectus eget placerat gravida. Vestibulum ullamcorper justo nec mattis facilisis. Proin pharetra, dolor ut posuere aliquet, nulla mauris mattis purus, non lacinia ex lectus in sem. In placerat neque et mauris finibus fringilla. Nulla convallis, massa ac fermentum ultrices, eros metus malesuada sapien, a dapibus ante lectus eget lacus. Ut accumsan facilisis quam et volutpat. Duis aliquet consectetur justo, quis bibendum velit dignissim id. Sed vel neque quam. Duis ut ex vitae ipsum egestas euismod. Nulla neque diam, malesuada ut dolor et, tincidunt pulvinar nisi. Donec gravida quam vitae enim mattis, non tincidunt urna suscipit.
 
