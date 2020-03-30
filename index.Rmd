@@ -20,6 +20,7 @@ output:
 |12:15 - 13:20 | Lunch & login                                                         |---------------|
 |13:30 - 14:30 | [Borrowing strength to compute site indices ](example1.html)          | Reto          |
 |14:45 - 15:45 | [Site indices to collated indices, trends and CI ](example1.html)     | Reto & Emily  |
+|16:00 - 16:45 | Questions from participants                                           | Reto, Emily, David & Chris  |
 
 Each session will be structured with a short presentation, a guided example and an exercise for participant to practice.
 
