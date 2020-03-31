@@ -1,19 +1,22 @@
 ---
 title: "Calculating butterfly trends, indexes and indicators"
 author: "Reto Schmucki, Emily Dennis, David Roy and Chris Van Swaay"
-date:
+date: "April 1^st^, 2020"
 output:
   html_document:
     toc: true
     toc_float: true
 ---
 
+<br>
+
 ### Motivation
 
 In the ABLE project new tools have been developed to make it easier for regional and national coordinators of Butterfly Monitoring Schemes to calculate indexes and trends as well as build indicators. This workshop will focus on the background of the method and learning how to use the tools. This workshop is open by invitation only to all co-ordinators of European Butterfly Monitoring Schemes as well as other people actively involved in the analysis and assessment of butterfly monitoring.
 
+<br>
 
-### Workshop Schedule (April 1^st^, 2020)
+### Schedule
 
 | Time         | Topic                                                                 | Instructor    |
 |--------------|-----------------------------------------------------------------------|---------------|
@@ -31,22 +34,22 @@ In the ABLE project new tools have been developed to make it easier for regional
 |              |                                                                       |               |
 
 
-Each session will be structured with a short presentation, a guided example and an exercise for participant to practice.
+**Each session will be structured with a short presentation, a guided example and an exercise for participant to practice.**
 
-### Before the workshop
+<br>
 
-#### Computer and software
+## Before the workshop
 
-Install **R** software from <a href="https://cran.r-project.org/"> CRAN</a>
+<br>
 
-Install **RTools** from <a href="https://cran.r-project.org/bin/windows/Rtools/" >CRAN</a>
+### Computer and software
 
-Install **RStudio Desktop** (optional) <a href="https://rstudio.com/products/rstudio/download/#download"> RStudio</a>
+- Install **R** software from <a href="https://cran.r-project.org/"> CRAN</a>
+- Install **RTools** from <a href="https://cran.r-project.org/bin/windows/Rtools/" >CRAN</a>
+- Install **RStudio Desktop** (optional) <a href="https://rstudio.com/products/rstudio/download/#download"> RStudio</a>
+- Install R packages
 
-Install R packages
-
-```
-
+``` {r eval=FALSE, echo = TRUE}
 install.packages("data.table")
 install.packages("speedglm")
 install.packages("devtools")
@@ -61,11 +64,19 @@ install.packages("tmap")
 devtools::install_github("RetoSchmucki/rbms")
 
 ```
+<br>
 
-download **Data file**: <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">workshop data</a>
+#### Download Data
+<a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">WORKSHOP DATA</a>
+
+<br>
 
 #### Reading
 
-Emily Dennis et al. 2016 <a href="https://onlinelibrary.wiley.com/doi/pdf/10.1111/biom.12506" target="_blank"> Access </a>
+**Dennis, E. B.**, Morgan, B. J. T., Freeman, S. N., Brereton, T. M., & Roy, D. B. (2016). A generalized abundance index for seasonal invertebrates. Biometrics, 72(4), 1305–1314. doi: 10.1111/biom.12506
 
-Reto Schmucki et al. 2017 <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.12561" target="_blank"> Access </a>
+<a href="https://onlinelibrary.wiley.com/doi/full/10.1111/biom.12506" target="_blank"><b>ACCESS</b></a>
+
+**Schmucki, R.**, Pe’er, G., Roy, D. B., Stefanescu, C., Van Swaay, C. A. M., Oliver, T. H., … Julliard, R. (2016). A regionally informed abundance index for supporting integrative analyses across butterfly monitoring schemes. Journal of Applied Ecology, 53(2), 501–510. doi: 10.1111/1365-2664.12561
+
+<a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2664.12561" target="_blank"><b>ACCESS</b></a>
