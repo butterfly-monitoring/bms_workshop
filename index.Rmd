@@ -67,7 +67,7 @@ devtools::install_github("RetoSchmucki/rbms")
 <br>
 
 #### Download Data
-<a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">WORKSHOP DATA</a>
+<a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip"><b>WORKSHOP DATA</b></a>
 
 <br>
 
