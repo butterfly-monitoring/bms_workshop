@@ -13,7 +13,7 @@
 
 <meta name="date" content="2020-03-31" />
 
-<title>Calculating species trends</title>
+<title>Multi-species indicators</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <script src="site_libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
@@ -519,7 +519,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Calculating species trends</h1>
+<h1 class="title toc-ignore">Multi-species indicators</h1>
 <h4 class="author">Emily Dennis</h4>
 <h4 class="date">31 March 2020</h4>
 
@@ -528,81 +528,115 @@ div.tocify {
 
 <p>Source trend functions required that you can download from <a href="workshop_functions.R"><strong>this link</strong></a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">source</span>(<span class="st">&quot;workshop_functions.R&quot;</span>)</span></code></pre></div>
-<p>Read in collated indices for species and BMS of interest</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Specify the species - note the underscore</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>spp &lt;-<span class="st"> &quot;Maniola_jurtina&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co"># Specify the BMS</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>bms &lt;-<span class="st"> &quot;UKBMS&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># Read in the bootstrapped collated indices</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>co_index &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(<span class="st">&quot;./bms_workshop_data/&quot;</span>, spp, <span class="st">&quot;_co_index_boot.rds&quot;</span>))</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># Filter to a single BMS to focus upon</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>co_index &lt;-<span class="st"> </span>co_index[BMS_ID <span class="op">==</span><span class="st"> </span>bms]</span>
-<span id="cb2-9"><a href="#cb2-9"></a>co_index</span></code></pre></div>
-<pre><code>##       BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID         SPECIES
-##    1:     0   2008   155       154  343.0026  UKBMS Maniola jurtina
-##    2:     0   2009   216       215  316.9605  UKBMS Maniola jurtina
-##    3:     0   2010   231       228  232.6817  UKBMS Maniola jurtina
-##    4:     0   2011   232       228  273.0741  UKBMS Maniola jurtina
-##    5:     0   2012   264       262  350.3058  UKBMS Maniola jurtina
-##   ---                                                              
-## 5006:   500   2013   159       259  421.1923  UKBMS Maniola jurtina
-## 5007:   500   2014   173       284  358.3261  UKBMS Maniola jurtina
-## 5008:   500   2015   158       254  350.4547  UKBMS Maniola jurtina
-## 5009:   500   2016   161       261  308.2660  UKBMS Maniola jurtina
-## 5010:   500   2017   148       233  471.5391  UKBMS Maniola jurtina</code></pre>
+<p>Read in collated indices for two species and filter to one BMS</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>bms &lt;-<span class="st"> &quot;UKBMS&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>co_index &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">readRDS</span>(<span class="st">&quot;./bms_workshop_data/Maniola_jurtina_co_index_boot.rds&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3"></a>                  <span class="kw">readRDS</span>(<span class="st">&quot;./bms_workshop_data/Polyommatus_icarus_co_index_boot.rds&quot;</span>))</span>
+<span id="cb2-4"><a href="#cb2-4"></a>co_index &lt;-<span class="st"> </span>co_index[BMS_ID <span class="op">==</span><span class="st"> </span>bms]</span>
+<span id="cb2-5"><a href="#cb2-5"></a>co_index</span></code></pre></div>
+<pre><code>##        BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID            SPECIES
+##     1:     0   2008   155       154 343.00258  UKBMS    Maniola jurtina
+##     2:     0   2009   216       215 316.96054  UKBMS    Maniola jurtina
+##     3:     0   2010   231       228 232.68168  UKBMS    Maniola jurtina
+##     4:     0   2011   232       228 273.07411  UKBMS    Maniola jurtina
+##     5:     0   2012   264       262 350.30579  UKBMS    Maniola jurtina
+##    ---                                                                 
+## 10016:   500   2013   143       169  84.67527  UKBMS Polyommatus icarus
+## 10017:   500   2014   150       163  57.17384  UKBMS Polyommatus icarus
+## 10018:   500   2015   146       202  49.50536  UKBMS Polyommatus icarus
+## 10019:   500   2016   139       158  26.61983  UKBMS Polyommatus icarus
+## 10020:   500   2017   148       198  59.65347  UKBMS Polyommatus icarus</code></pre>
 <p>Convert to log 10 collated indices (TRMOBS)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>co_index[, LOGDENSITY<span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">log</span>(COL_INDEX)<span class="op">/</span><span class="kw">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="op">:</span><span class="er">=</span><span class="st"> </span>LOGDENSITY <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(LOGDENSITY) <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, by =<span class="st"> </span>.(BOOTi)]</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>co_index[, LOGDENSITY<span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">log</span>(COL_INDEX)<span class="op">/</span><span class="kw">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="op">:</span><span class="er">=</span><span class="st"> </span>LOGDENSITY <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(LOGDENSITY) <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, by =<span class="st"> </span>.(SPECIES, BOOTi)]</span>
 <span id="cb4-2"><a href="#cb4-2"></a>co_index</span></code></pre></div>
-<pre><code>##       BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID         SPECIES LOGDENSITY
-##    1:     0   2008   155       154  343.0026  UKBMS Maniola jurtina   2.535297
-##    2:     0   2009   216       215  316.9605  UKBMS Maniola jurtina   2.501005
-##    3:     0   2010   231       228  232.6817  UKBMS Maniola jurtina   2.366762
-##    4:     0   2011   232       228  273.0741  UKBMS Maniola jurtina   2.436281
-##    5:     0   2012   264       262  350.3058  UKBMS Maniola jurtina   2.544447
-##   ---                                                                         
-## 5006:   500   2013   159       259  421.1923  UKBMS Maniola jurtina   2.624480
-## 5007:   500   2014   173       284  358.3261  UKBMS Maniola jurtina   2.554278
-## 5008:   500   2015   158       254  350.4547  UKBMS Maniola jurtina   2.544632
-## 5009:   500   2016   161       261  308.2660  UKBMS Maniola jurtina   2.488926
-## 5010:   500   2017   148       233  471.5391  UKBMS Maniola jurtina   2.673518
-##         TRMOBS
-##    1: 2.013024
-##    2: 1.978731
-##    3: 1.844488
-##    4: 1.914007
-##    5: 2.022173
-##   ---         
-## 5006: 2.094971
-## 5007: 2.024769
-## 5008: 2.015123
-## 5009: 1.959416
-## 5010: 2.144008</code></pre>
-<p>Estimate and classify species trends with a confidence interval based on the bootstraps</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>sp_trend &lt;-<span class="st"> </span><span class="kw">estimate_boot_trends</span>(co_index)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>sp_trend</span></code></pre></div>
-<pre><code>##   data_from data_to data_nyears minyear maxyear  n nboot_lt rate_lt rate_lt_low
-## 0      2008    2017          10    2008    2017 10      500 1.03176    1.018995
-##   rate_lt_upp   pcn_lt     TrendClass_lt
-## 0    1.044679 32.49766 Moderate increase</code></pre>
-<p>Plot the species log collated index with bootstrapped 95% confidence interval and linear trend line (in red)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Calculate mean log index for original data</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>co_index0_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(co_index[BOOTi <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]<span class="op">$</span>LOGDENSITY)</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># Derive interval from quantiles</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>co_index_ci &lt;-<span class="st"> </span><span class="kw">merge</span>(co_index[BOOTi <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, .(M_YEAR, TRMOBS, BMS_ID)],</span>
-<span id="cb8-5"><a href="#cb8-5"></a>                        co_index[BOOTi <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>, .(<span class="dt">LOWER =</span> <span class="kw">quantile</span>(LOGDENSITY <span class="op">-</span><span class="st"> </span>co_index0_mean <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="fl">0.025</span>),</span>
-<span id="cb8-6"><a href="#cb8-6"></a>                          <span class="dt">UPPER =</span> <span class="kw">quantile</span>(LOGDENSITY <span class="op">-</span><span class="st"> </span>co_index0_mean <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="fl">0.975</span>)), <span class="dt">by =</span> .(BMS_ID, M_YEAR)],</span>
-<span id="cb8-7"><a href="#cb8-7"></a>                        <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;BMS_ID&quot;</span>,<span class="st">&quot;M_YEAR&quot;</span>))</span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="kw">ggplot</span>(co_index_ci, <span class="kw">aes</span>(M_YEAR, TRMOBS))<span class="op">+</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">14</span>))<span class="op">+</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> LOWER, <span class="dt">ymax =</span> UPPER), <span class="dt">alpha =</span> <span class="fl">.3</span>)<span class="op">+</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Year&quot;</span>)<span class="op">+</span><span class="kw">ylab</span>(<span class="kw">expression</span>(<span class="st">&#39;log &#39;</span>[<span class="st">&#39;(10)&#39;</span>]<span class="op">*</span><span class="st">&#39; Collated Index&#39;</span>))<span class="op">+</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Collated index for&quot;</span>, <span class="kw">gsub</span>(<span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>, spp), <span class="st">&quot;in&quot;</span>, bms))</span></code></pre></div>
-<p><img src="species_trends_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre><code>##        BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID            SPECIES
+##     1:     0   2008   155       154 343.00258  UKBMS    Maniola jurtina
+##     2:     0   2009   216       215 316.96054  UKBMS    Maniola jurtina
+##     3:     0   2010   231       228 232.68168  UKBMS    Maniola jurtina
+##     4:     0   2011   232       228 273.07411  UKBMS    Maniola jurtina
+##     5:     0   2012   264       262 350.30579  UKBMS    Maniola jurtina
+##    ---                                                                 
+## 10016:   500   2013   143       169  84.67527  UKBMS Polyommatus icarus
+## 10017:   500   2014   150       163  57.17384  UKBMS Polyommatus icarus
+## 10018:   500   2015   146       202  49.50536  UKBMS Polyommatus icarus
+## 10019:   500   2016   139       158  26.61983  UKBMS Polyommatus icarus
+## 10020:   500   2017   148       198  59.65347  UKBMS Polyommatus icarus
+##        LOGDENSITY   TRMOBS
+##     1:   2.535297 2.013024
+##     2:   2.501005 1.978731
+##     3:   2.366762 1.844488
+##     4:   2.436281 1.914007
+##     5:   2.544447 2.022173
+##    ---                    
+## 10016:   1.927757 2.254929
+## 10017:   1.757197 2.084370
+## 10018:   1.694652 2.021825
+## 10019:   1.425205 1.752378
+## 10020:   1.775636 2.102809</code></pre>
+<p>Next we calculate and plot the indicator, where the confidence interval is based on the bootstraps</p>
+<p>First we generate the indicator for real data</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>msi &lt;-<span class="st"> </span><span class="kw">produce_indicator0</span>(co_index[BOOTi <span class="op">==</span><span class="st"> </span><span class="dv">0</span>])</span>
+<span id="cb6-2"><a href="#cb6-2"></a>msi</span></code></pre></div>
+<pre><code>##    year indicator ind_gam0    SMOOTH NSPECIES
+## 1  2008  93.06434 63.45042 100.00000        2
+## 2  2009 128.66868 78.32167 123.43759        2
+## 3  2010 159.79842 79.71374 125.63153        2
+## 4  2011  93.27168 64.26747 101.28769        2
+## 5  2012  79.35512 63.13894  99.50909        2
+## 6  2013 164.67445 87.10999 137.28827        2
+## 7  2014 135.27982 95.79242 150.97207        2
+## 8  2015 131.30396 79.97811 126.04818        2
+## 9  2016  89.99077 79.85997 125.86200        2
+## 10 2017 157.60336 89.84621 141.60064        2</code></pre>
+<p>Then generate an indicator for each bootstrap</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>msi_boot &lt;-<span class="st"> </span><span class="kw">produce_indicators_boot</span>(co_index[BOOTi <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>])</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">str</span>(msi_boot)</span></code></pre></div>
+<pre><code>##  num [1:10, 1:500] 59.9 73.6 75 60.9 61.7 ...
+##  - attr(*, &quot;dimnames&quot;)=List of 2
+##   ..$ : NULL
+##   ..$ : chr [1:500] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>msi_boot[,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</span></code></pre></div>
+<pre><code>##              1        2        3        4        5
+##  [1,] 59.94336 63.03045 65.00111 63.97033 66.23381
+##  [2,] 73.55726 77.28879 79.18544 78.92274 83.27691
+##  [3,] 74.97925 78.57417 79.19096 80.36084 85.12711
+##  [4,] 60.88879 63.89199 61.36524 65.10461 68.43662
+##  [5,] 61.72164 62.75340 58.76827 62.95547 63.94505
+##  [6,] 87.33930 89.17058 84.65269 86.04877 87.39197
+##  [7,] 96.05617 99.77533 96.20685 95.91916 98.09845
+##  [8,] 79.92003 84.19464 82.31011 80.30745 81.79870
+##  [9,] 79.69771 82.81265 82.23267 80.10832 80.82010
+## [10,] 89.77988 90.08617 90.71027 89.64004 89.36373</code></pre>
+<p>Now we add a confidence interval to the indicator based on quantiles from the bootstrapped indicators</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>msi &lt;-<span class="st"> </span><span class="kw">add_indicator_CI</span>(msi, msi_boot)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>msi</span></code></pre></div>
+<pre><code>##    year indicator ind_gam0    SMOOTH NSPECIES LOWsmooth1 UPPsmooth1
+## 1  2008  93.06434 63.45042 100.00000        2   88.14009   111.0803
+## 2  2009 128.66868 78.32167 123.43759        2  112.91961   134.9132
+## 3  2010 159.79842 79.71374 125.63153        2  114.83919   136.8903
+## 4  2011  93.27168 64.26747 101.28769        2   92.73150   110.9626
+## 5  2012  79.35512 63.13894  99.50909        2   89.62639   109.2745
+## 6  2013 164.67445 87.10999 137.28827        2  125.17660   149.9729
+## 7  2014 135.27982 95.79242 150.97207        2  140.38601   161.6547
+## 8  2015 131.30396 79.97811 126.04818        2  116.72898   134.7303
+## 9  2016  89.99077 79.85997 125.86200        2  120.03092   131.7026
+## 10 2017 157.60336 89.84621 141.60064        2  139.70652   143.4271</code></pre>
+<p>Plot the indicator</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">ggplot</span>(msi, <span class="kw">aes</span>(year, indicator))<span class="op">+</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">14</span>))<span class="op">+</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> LOWsmooth1, <span class="dt">ymax =</span> UPPsmooth1), <span class="dt">alpha=</span>.<span class="dv">2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> SMOOTH), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">max</span>(<span class="dv">200</span>,<span class="kw">max</span>(msi<span class="op">$</span>UPPsmooth1))))<span class="op">+</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Example indicator for&quot;</span>, bms, <span class="st">&quot;based on two species&quot;</span>))</span></code></pre></div>
+<p><img src="multi-species_indicators_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Calculate the indicator trend including confidence interval from the bootstraps</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>msi_trend &lt;-<span class="st"> </span><span class="kw">estimate_ind_trends</span>(msi, msi_boot)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>msi_trend</span></code></pre></div>
+<pre><code>##   minyear maxyear nboot_lt  rate_lt rate_lt_low rate_lt_upp   pcn_lt pcn_lt_low
+## 1    2008    2017      500 1.018977    1.017446     1.04204 18.43512   16.84273
+##   pcn_lt_upp     TrendClass_lt
+## 1   44.86399 Moderate increase</code></pre>
 
 
 
