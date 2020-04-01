@@ -9,7 +9,7 @@ output:
     code_folding: "hide"
 ---
 
-### Implementing the GAI
+## Implementing the GAI
 
 After having successfully computed estimates of the regional flight curve, you can now use this information together with your count data to estimate a total number of butterfly per monitoring site over a season. This will provide you with an estimated abundance for each site that can be used to compute a collated index over the entire regions or a group of sites.
 
@@ -143,7 +143,7 @@ co_index_boot <- co_index
 saveRDS(co_index_boot, file.path("my_code/bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
 ```
 
-## Figure with CI
+### Figure with CI
 
 Now that you have a collated index, and a series bootstrapped collated indices, you can compute a 95% Confidence Interval around your index and construct a figure to illustrate the temporal trend resulting from the annual indices. Here we will rescale and present the indices on a log(index)/log(10) scale. Confidence interval are computed using the 0.025 and 0.975 quantile from the *n* bootstrap sample.  
 

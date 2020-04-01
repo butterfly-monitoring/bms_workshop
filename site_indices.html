@@ -526,8 +526,8 @@ div.tocify {
 </div>
 
 
-<div id="implementing-the-gai" class="section level3">
-<h3>Implementing the GAI</h3>
+<div id="implementing-the-gai" class="section level2">
+<h2>Implementing the GAI</h2>
 <p>After having successfully computed estimates of the regional flight curve, you can now use this information together with your count data to estimate a total number of butterfly per monitoring site over a season. This will provide you with an estimated abundance for each site that can be used to compute a collated index over the entire regions or a group of sites.</p>
 <p>For this task, we will used the flight curve <a href="flight_curve_computing.html">computed earlier</a> and the <code>impute_count</code>, <code>site_index</code> and finally <code>collated_index</code> functions available in <code>rbms</code> package</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(data.table)</span>
@@ -580,7 +580,6 @@ div.tocify {
 <span id="cb2-45"><a href="#cb2-45"></a><span class="co">#                                            )</span></span>
 <span id="cb2-46"><a href="#cb2-46"></a>ts_flight_curve &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">file.path</span>(<span class="st">&quot;my_code/bms_workshop_data&quot;</span>, <span class="kw">paste</span>(<span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, s_sp), <span class="kw">paste</span>(region_bms, <span class="dt">collapse=</span><span class="st">&quot;_&quot;</span>), <span class="st">&quot;pheno.rds&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)))</span>
 <span id="cb2-47"><a href="#cb2-47"></a>pheno &lt;-<span class="st"> </span>ts_flight_curve<span class="op">$</span>pheno</span></code></pre></div>
-</div>
 <div id="impute-site-index" class="section level3">
 <h3>Impute &amp; Site index</h3>
 <p>With the phenology and teh observed counts, you can now impute values for missing week counts and adequately compute sites abundance index over the entire monitoring season.</p>
@@ -664,8 +663,8 @@ div.tocify {
 <span id="cb8-28"><a href="#cb8-28"></a>co_index_boot &lt;-<span class="st"> </span>co_index</span>
 <span id="cb8-29"><a href="#cb8-29"></a><span class="kw">saveRDS</span>(co_index_boot, <span class="kw">file.path</span>(<span class="st">&quot;my_code/bms_workshop_data&quot;</span>, <span class="kw">paste</span>( <span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, s_sp), bms_id, <span class="st">&quot;co_index_boot.rds&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;_&quot;</span>)))</span></code></pre></div>
 </div>
-<div id="figure-with-ci" class="section level2">
-<h2>Figure with CI</h2>
+<div id="figure-with-ci" class="section level3">
+<h3>Figure with CI</h3>
 <p>Now that you have a collated index, and a series bootstrapped collated indices, you can compute a 95% Confidence Interval around your index and construct a figure to illustrate the temporal trend resulting from the annual indices. Here we will rescale and present the indices on a log(index)/log(10) scale. Confidence interval are computed using the 0.025 and 0.975 quantile from the <em>n</em> bootstrap sample.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>bms_id &lt;-<span class="st"> &quot;NLBMS&quot;</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
@@ -698,6 +697,7 @@ div.tocify {
 <span id="cb9-29"><a href="#cb9-29"></a></span>
 <span id="cb9-30"><a href="#cb9-30"></a>plot_col</span></code></pre></div>
 <p><img src="site_indices_files/figure-html/collated_index_figure-1.png" width="672" /></p>
+</div>
 </div>
 
 
