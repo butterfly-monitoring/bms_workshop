@@ -10,7 +10,7 @@ output:
 ---
 
 
-Source trend functions required
+Source trend functions required that you can download from [**this link**](workshop_functions.R).
 
 ``` {r source_functions}
 source("workshop_functions.R")
@@ -24,7 +24,7 @@ spp <- "Maniola_jurtina"
 # Specify the BMS
 bms <- "UKBMS"
 # Read in the bootstrapped collated indices
-co_index <- readRDS(paste0("./data/", spp, "_co_index_boot.rds"))
+co_index <- readRDS(paste0("./bms_workshop_data/", spp, "_co_index_boot.rds"))
 # Filter to a single BMS to focus upon
 co_index <- co_index[BMS_ID == bms]
 ```
