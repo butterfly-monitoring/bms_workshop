@@ -34,13 +34,13 @@ library(data.table)
 All data are stored in `rds` format, this format is highly efficient for storing R object, but you could also have them in any other format. To load `.rds data`, we use the function `readRDS()`
 
 ``` {r load_bms_data}
-b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
-m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
-m_site_sub <- readRDS("my_code/bms_workshop_data/work_site.rds")
+b_count_sub <- readRDS("bms_workshop_data/work_count.rds")
+m_visit_sub <- readRDS("bms_workshop_data/work_visit.rds")
+m_site_sub <- readRDS("bms_workshop_data/work_site.rds")
 
 ## to read csv into a data.table use fread()
 
-bcz_class <- data.table::fread("my_code/bms_workshop_data/GEnS_v3_classification.csv")
+bcz_class <- data.table::fread("bms_workshop_data/GEnS_v3_classification.csv")
 
 b_count_sub
 ```

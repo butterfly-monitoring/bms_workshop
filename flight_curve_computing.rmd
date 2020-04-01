@@ -34,8 +34,8 @@ library(rbms)
 Here we will use the count and visit data.
 
 ``` {r data_load}
-b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
-m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
+b_count_sub <- readRDS("bms_workshop_data/work_count.rds")
+m_visit_sub <- readRDS("bms_workshop_data/work_visit.rds")
 ```
 
 ### Exploring data
@@ -158,20 +158,24 @@ ts_flight_curve <- rbms::flight_curve(ts_season_count,
                                             TimeUnit = "w"
                                             )
 
-saveRDS(ts_flight_curve, file.path("my_code/bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
+saveRDS(ts_flight_curve, file.path("bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
 ```
+
 
 8. Extract and plot the estimated phenology
 
-> `rbms` does not contain a plot method, so you have to make your own with your favorite tool. 
-
-*Here is an example with plot in base R - you can do better!*
-
-``` {r flight_curve_plot}
-ts_flight_curve <- readRDS(file.path("my_code/bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
+``` {r flight_curve_plot_1}
+ts_flight_curve <- readRDS(file.path("bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
 
 datatable(ts_flight_curve$pheno[1:370, .(SPECIES, M_YEAR, MONTH, trimWEEKNO, WEEK_SINCE, ANCHOR, NM)], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+```
 
+> `rbms` does not contain a plot method, so you have to make your own with your favourite tool. 
+>
+> **Bellow is example with plot in base R**
+> **I am sure you can do better!**
+
+``` {r flight_curve_plot_2}
 ## Extract phenology part
 pheno <- ts_flight_curve$pheno 
 

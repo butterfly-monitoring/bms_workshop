@@ -541,13 +541,13 @@ div.tocify {
 <p>You will need to load the following R packages and the data found in the bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">downloaded here</a>. Once you have downloaded the data, unzip the folder and add the data in your R project directory, your current R working directory, or set your working directly accordingly <code>setwd()</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(data.table)</span></code></pre></div>
 <p>All data are stored in <code>rds</code> format, this format is highly efficient for storing R object, but you could also have them in any other format. To load <code>.rds data</code>, we use the function <code>readRDS()</code></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>b_count_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;my_code/bms_workshop_data/work_count.rds&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>m_visit_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;my_code/bms_workshop_data/work_visit.rds&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>m_site_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;my_code/bms_workshop_data/work_site.rds&quot;</span>)</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>b_count_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>m_visit_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>m_site_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
 <span id="cb2-5"><a href="#cb2-5"></a><span class="co">## to read csv into a data.table use fread()</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>bcz_class &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">fread</span>(<span class="st">&quot;my_code/bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>bcz_class &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
 <span id="cb2-8"><a href="#cb2-8"></a></span>
 <span id="cb2-9"><a href="#cb2-9"></a>b_count_sub</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial visit_date year month day       species_name

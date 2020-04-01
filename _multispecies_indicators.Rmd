@@ -18,8 +18,8 @@ source("workshop_functions.R")
 Read in collated indices for 2 species and filter to one BMS
 ``` {r collated_index}
 bms <- "UKBMS"
-co_index <- rbind(readRDS("my_code/bms_workshop_data/Maniola_jurtina_co_index_boot.rds"),
-                  readRDS("my_code/bms_workshop_data/Polyommatus_icarus_co_index_boot.rds"))
+co_index <- rbind(readRDS("bms_workshop_data/Maniola_jurtina_co_index_boot.rds"),
+                  readRDS("bms_workshop_data/Polyommatus_icarus_co_index_boot.rds"))
 co_index <- co_index[BMS_ID == bms]
 ```
 

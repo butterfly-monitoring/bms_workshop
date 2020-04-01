@@ -19,6 +19,7 @@ For this task, we will used the flight curve [computed earlier](flight_curve_com
 ``` {r package_load}
 library(data.table)
 library(rbms)
+library(ggplot2)
 ```
 
 Here we will use the count and visit data.
@@ -28,8 +29,8 @@ Here we will use the count and visit data.
 s_sp <- "Polyommatus icarus"
 region_bms <- c("NLBMS", "FRBMS")
 
-b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
-m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
+b_count_sub <- readRDS("bms_workshop_data/work_count.rds")
+m_visit_sub <- readRDS("bms_workshop_data/work_visit.rds")
 
 setnames(m_visit_sub, c("transect_id_serial", "visit_date"), c("SITE_ID", "DATE"))
 names(m_visit_sub) <- toupper(names(m_visit_sub))
@@ -69,7 +70,7 @@ ts_season_count <- rbms::ts_monit_count_site(ts_season_visit, MY_count_region, s
 #                                            SelectYear = NULL,
 #                                            TimeUnit = "w"
 #                                            )
-ts_flight_curve <- readRDS(file.path("my_code/bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
+ts_flight_curve <- readRDS(file.path("bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
 pheno <- ts_flight_curve$pheno
 ```
 
@@ -85,7 +86,7 @@ impt_counts <- rbms::impute_count(ts_season_count = ts_season_count,
 
 sindex <- rbms::site_index(butterfly_count = impt_counts, MinFC = 0.10)
 
-saveRDS(sindex, file.path("my_code/bms_workshop_data", paste( gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "sindex.rds", sep="_")))
+saveRDS(sindex, file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "sindex.rds", sep="_")))
 ```
 
 ### Collated index
@@ -95,7 +96,7 @@ Now that we have all each site index, we can collate them together to estimate a
 ``` {r collated_index}
 bms_id <- "NLBMS"
 
-sindex <- readRDS(file.path("my_code/bms_workshop_data", paste( gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "sindex.rds", sep="_")))
+sindex <- readRDS(file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "sindex.rds", sep="_")))
 
 sindex[substr(SITE_ID, 1, 5) == bms_id, ]
 
@@ -140,7 +141,7 @@ co_index$BMS_ID <- bms_id
 co_index$SPECIES <- s_sp
 
 co_index_boot <- co_index
-saveRDS(co_index_boot, file.path("my_code/bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
+saveRDS(co_index_boot, file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
 ```
 
 ### Figure with CI
@@ -150,7 +151,7 @@ Now that you have a collated index, and a series bootstrapped collated indices, 
 ``` {r collated_index_figure}
 bms_id <- "NLBMS"
 
-co_index_boot <- readRDS(file.path("my_code/bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
+co_index_boot <- readRDS(file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
 
 boot0 <- co_index_boot[ , mean(COL_INDEX, na.rm=TRUE), by = M_YEAR]
 boot0[, LOGDENSITY0 := log(V1) / log(10)]
