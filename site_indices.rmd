@@ -9,7 +9,7 @@ output:
     code_folding: "hide"
 ---
 
-### ### Generalized Abundance Index (2)
+### Generalized Abundance Index (2)
 
 After having successfully computed estimates of the regional flight curve, you can now use this information together with your count data to estimate a total number of butterfly per monitoring site over a season. This will provide you with an estimated abundance for each site that can be used to compute a collated index over the entire regions or a group of sites.
 
