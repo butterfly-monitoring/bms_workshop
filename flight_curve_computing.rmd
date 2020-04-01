@@ -38,6 +38,8 @@ b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
 m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
 ```
 
+### Exploring data
+
 Let's first explore the data and what is in these two tables
 
 ``` {r data_explore}
