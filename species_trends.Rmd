@@ -10,7 +10,7 @@ output:
 ---
 
 
-Source trend functions required that you can download from [**this link**](workshop_functions.R).
+Source trend functions required that you can download from [**this link**](workshop_functions.R)
 
 ``` {r source_functions}
 source("workshop_functions.R")
