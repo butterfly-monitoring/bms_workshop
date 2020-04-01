@@ -1,0 +1,107 @@
+---
+title: "Mapping and extracting GIS information"
+author: "Reto Schmucki"
+date: "29 March 2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: "hide"
+---
+
+### Mapping BMS sites
+
+Working with spatially explicit data means that you can link them to various other environmental data sets. This also allow you to explore your data points visually and get a glimpse of there distribution and geographical context. In this short tutorial, we will explore how to generate spatial object from your BMS site data, using the [R package sf](https://r-spatial.github.io/sf/index.html), a powerful tool for geospatial computation in R. 
+
+---
+
+In this session, you will:
+
+1. read csv file with data.table
+2. convert coordinates in spatial object using sf
+3. read raster file with the raster package
+4. produce a map with rasterVis and tmap
+5. extract value from raster using a vector object
+
+----
+
+You will need to load the following R packages and the data found in the bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">downloaded here</a>.
+Once you have downloaded the data, unzip the folder and add the data in your R project directory, your current R working directory, or set your working directly accordingly `setwd()`.
+
+``` {r load_library}
+library(data.table)
+library(sf)
+library(raster)
+library(rasterVis)
+library(tmap)
+```
+
+All data are stored in `rds` format, this format is highly efficient for storing R object, but you could also have them in any other format. To load `.rds data`, we use the function `readRDS()`
+
+``` {r load_bms_data}
+b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
+m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
+m_site_sub <- readRDS("my_code/bms_workshop_data/work_site.rds")
+```
+For this session, we will also upload a raster file with Bioclimate Regions provided by <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/geb.12022">Metzger et al. 2013</a> (see [licence](data/readme_metzger_data.txt)). tje raster file is provided in `.grd` format and can be read into R with the `raster()` function from the raster package. Together with the raster file with the Bioclimate Regions, you can load the classification available in a `.csv` and can be loaded with `data.table`. To subset the data from the eBMS database, I used a bounding box that can be loaded in R with the package `sf`.
+
+
+### Mapping
+
+``` {r load_spatial_data, results='hide', message=FALSE, warning=FALSE}
+bcz <- raster::raster("my_code/bms_workshop_data/metzger_bcz_genz3")
+bb <- sf::st_read("my_code/bms_workshop_data/bbox.shp")
+bcz_class <- data.table::fread("my_code/bms_workshop_data/GEnS_v3_classification.csv")
+```
+
+First we will produce a spatial object for the points corresponding to the BMS transects in the m_site_sub object (where "m" stands for monitoring). Using the sf function `st_as_sf()` you can build points from longitude/latitude coordinates and CRS=3035 as we use the standard **ETRS89-extended/LAEA Europe** as projection system [EPGS:3035](https://epsg.io/3035). You can have a quick look at the points on a map with the function `mapview()` from the R package mapview. This will open a window in your browser with an interactive map of your points. 
+
+``` {r build_sf_object}
+## sf transect location
+site_sf <- sf::st_as_sf(m_site_sub, coords = c("transect_lon_1km", "transect_lat_1km"), crs = 3035)
+mapview::mapview(site_sf)
+```
+
+To produce a map with the Bioclimate Region, you can use the function `levelplot()` in the rasterVis package, where you can add the other layers such as the points and polygons. Unfortunately, this package still use the older format of spatial object in R that is a legacy of the package `sp`. The good news is that sf can convert its object to a "sp" object with the function `as(x, "Spatial)` where x is a simple feature object. Because the Biogeographic Region raster file is provided in degree-decimal long/lat (EPGS:4326), we will project the points object in the same projection using the `st_transform()` function. The same can be done with the bounding box object.
+
+``` {r build_level_plot}
+## plot point on raster using rasterVis
+levelplot(bcz) + layer(sp.points(as(st_geometry(st_transform(site_sf, 4326)), "Spatial"), col = "cyan4")) +
+layer(sp.polygons(as(st_geometry(st_transform(bb, 4326)), "Spatial")))
+```
+
+> Trick: you can extract a bounding box with the function drawExtent() from raster package and build a corresponding polygon with the function st_as_sfc() from sf package.
+> `st_as_sfc(st_bbox(drawExtent(), crs = st_crs(4326)))`
+
+Another option is to use the package tmap to produce "better looking map", but also much slower. For raster you will the function `tm_raster()` and add other layers using the same principle as in ggplot. Obviously, producing good looking and informative maps is an art and you can spend ages working on them to get beautiful results.
+
+``` {r build_tmap, message=FALSE}
+## plot point on raster using tmap
+tm_shape(bcz) + tm_raster(col = "Bioclimate", alpha = 1) + 
+tm_shape(st_geometry(st_transform(site_sf, 4326))) + tm_symbols(col = "dodgerblue4", size = 0.1, shape = 20) +
+tm_shape(st_geometry(st_transform(bb, 4326))) + tm_borders(lty = 2, col= 'magenta', lwd=2)
+```
+
+### Extracting spatial information
+
+Using the simple feature object produced previously from the site data coordinates, you can now extract information from the Biogeographic Region raster layer, using the function `extract()`. These values can then be appended to your site data set using the `merge()` method from the data.table package or your favourite tidy tool.
+
+``` {r extrat_raster, message=FALSE}
+
+site_dt <- data.table(site_sf)
+site_dt$GEnZ_seq <- extract(bcz, st_transform(site_sf, 4326))
+
+setkey(site_dt, GEnZ_seq)
+setkey(bcz_class, GEnZ_seq)
+site_dt <- merge(site_dt, unique(bcz_class[, .(GEnZ_seq, GEnZname)]), all.x=TRUE)
+```
+
+### Exploring results
+
+You can have a look at the result using below, with an interactive map to explore what just happened.
+
+``` {r explore_table_map, message = FALSE}
+library(DT)
+datatable(site_dt[ ,.(bms_id, transect_id_serial, GEnZ_seq, GEnZname)], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+mapview::mapview(bcz) + mapview::mapview(st_transform(site_sf, 4326))
+```

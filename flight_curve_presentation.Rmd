@@ -1,0 +1,20 @@
+---
+title: "Phenololy in BMS data - flight curve"
+author: "Emily Dennis"
+date: "29 March 2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: "hide"
+---
+
+### Phenology
+
+Why does it matter when and where you count butterfly? If you know the biology of these beautiful insects, the answer is obvious. So if it matter in the field, how do we deal with this in the lab (computer lab). How can we deal with some are monitored every weeks while other are lacking 50% of the weeks because the weather is just not good enough to walk your BMS transect and count butterflies. This has major impact on the number of butterfly you report and this affect your ability to estimate relevant abundance indices.
+
+Statisticians and ecologists have work hard to develop method to mitigate the impact and deal with the issues of counting organisms that have variable phenology over time and space. 
+
+### What we have been working on lately
+
+One of the approach is to use methods that can fall under the Generalized Abundance Index approach. See Emily's presentation on <a href="GAI approach.pdf" target="_blank">Generalize Abundance Index presentation</a>.

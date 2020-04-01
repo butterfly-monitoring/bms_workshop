@@ -1,0 +1,107 @@
+---
+title: "Exploring the data.table package"
+author: "Reto Schmucki"
+date: "29 March 2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: "hide"
+---
+
+### data.table package
+
+Under the hood, many function of operation included in the rbms package are done using the `data.table` package. The <a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">data.table</a> package offer fast and powerful operation on large data set with a very compact syntax. 
+
+---
+
+In this session, you will:
+
+1. read csv file with data.table
+2. merge data set with one or multiple key
+3. rename column names
+4. extract basic statistics
+
+----
+
+You will need to load the following R packages and the data found in the bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">downloaded here</a>.
+Once you have downloaded the data, unzip the folder and add the data in your R project directory, your current R working directory, or set your working directly accordingly `setwd()`.
+
+``` {r load_library}
+library(data.table)
+```
+
+All data are stored in `rds` format, this format is highly efficient for storing R object, but you could also have them in any other format. To load `.rds data`, we use the function `readRDS()`
+
+``` {r load_bms_data}
+b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
+m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
+m_site_sub <- readRDS("my_code/bms_workshop_data/work_site.rds")
+
+## to read csv into a data.table use fread()
+
+bcz_class <- data.table::fread("my_code/bms_workshop_data/GEnS_v3_classification.csv")
+
+b_count_sub
+```
+
+When you look at a data.table object, you can will see the first and last five row, with all column names. 
+
+1. You can access specific column the same way as you would do with a data.frame with the \$ sign or a vector of names such as c("col1", "col2, ..., "col7"). 
+2. You can subset the data.table with an logical argument of indices in the first position after the square bracket (e.g my_data_table[ col1 <= 453, ])
+3. You can create new column with the ":=" symbol and a function (e.g. my_data_table[col1 <= 453, new_col := mean(col1)])
+4. You can compute operation by group using a "by" argument in third position within the square brackets (e.g.  my_data_table[col1 <= 453, new_col := mean(col1), by = col3])
+
+### Extract columns
+``` {r manipulate_data.table1}
+my_new_dt <- b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]
+my_new_dt
+```
+### Extract unique
+``` {r manipulate_data.table_operation}
+unique(my_new_dt$bms_id)
+unique(my_new_dt[, .(bms_id, year)])
+```
+
+### Subset
+``` {r manipulate_data.table_subset}
+my_new_dt[bms_id == "NLBMS", ]
+```
+### Work with date
+``` {r manipulate_data.table_date}
+my_new_dt[ , month := month(visit_date)][ , c("day", "year") := .(mday(visit_date), year(visit_date))]
+my_new_dt
+```
+
+### Count object
+``` {r manipulate_data.table_countN}
+my_new_dt[ , .N, by = bms_id]
+```
+
+### rename column
+``` {r manipulate_data.table_rename}
+## change names
+setnames(b_count_sub, "transect_id_serial", "SITE_ID")
+setnames(b_count_sub, c("species_name", "bms_id"), c("SPECIES", "BMS_ID"))
+names(b_count_sub) <- toupper(names(b_count_sub))
+b_count_sub
+```
+
+
+### Merge data sets
+``` {r manipulate_data.table_merge}
+## merge data set
+setnames(m_site_sub, "transect_id_serial", "SITE_ID")
+
+setkey(b_count_sub, SITE_ID)
+setkey(m_site_sub, SITE_ID)
+
+merge(b_count_sub, m_site_sub[bms_id == "FRBMS" , .(SITE_ID, transect_lon_1km, transect_lat_1km)])
+merge(b_count_sub, m_site_sub[bms_id == "FRBMS" , .(SITE_ID, transect_lon_1km, transect_lat_1km)], all.x = TRUE)
+
+data_m <- merge(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], all.x = TRUE)
+data_m
+```
+
+There is many way to manipulate tabular data sets in R, dplyr and data.table are especially efficient with large data set, data.table can manipulate millions of row with ease. 
+Learn one of these tool will help you seriously in every R task and analysis as 80% of the work is to organize the data to make them fit for the analysis or build a graph.

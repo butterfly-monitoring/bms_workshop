@@ -4,16 +4,29 @@ navbar:
   right:
     - text: "Home"
       href: index.html
-    # - text: "WS1"
-    #   href: example1.html
-    # - text: "WS2"
-    #   menu:
-    #    - text: "Intro to data.table"
-    #      href: example1.html
-    #    - text: "flight curve borrowing strength"
-    #      href: example1.html
-    #    - text: "computing flight curve"
-    #      href: example1.html
+    - text: "WS1"
+      menu: 
+        - text: "data wrangling"
+          href: data_wrangling.html
+        - text: "mapping"
+          href: mapping_site_geoclimate.html
+    - text: "WS2"
+      menu: 
+        - text: "Phenology and GAI"
+          href: flight_curve_presentation.html
+        - text: "Estimating phenology"
+          href: flight_curve_computing.html
+    - text: "WS3"
+      menu: 
+        - text: "Site and Collated Index"
+          href: site_indices.html
+    - text: "WS4"
+      menu:
+        - text: "Species trends"
+          href: species_trends.html
+        - text: "Multispecies indicators"
+          href: multispecies_indicators.html
+
 
 output_dir: "."
 exclude: ["CONTRIBUT*.md","index.md","README.md","*.db"]

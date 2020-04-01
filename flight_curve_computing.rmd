@@ -1,0 +1,201 @@
+---
+title: "Computing flight curve"
+author: "Reto Schmucki"
+date: "29 March 2020"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: "hide"
+---
+
+### Implementing the GAI
+
+Here you we will use the `rbms` package to estimate a regional flight curve for two different species, *Maniola jurtina* and *Polyommatus icarus*. We will use a subset of real data over 10 years, extracted from the eBMS database and generously provided by our colleagues in France, the UK and the Netherlands. The data have been anonymized and their spatial resolution limited to 1km accuracy, but the count are real, including the noise.
+
+The bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">downloaded here</a>.
+
+For this section, you will need to install and load the `rbms` package available on GitHub with some explanation and documentation available <a href="https://retoschmucki.github.io/rbms/">here</a>
+
+```
+if(!requireNamespace("devtools")) install.packages("devtools")
+devtools::install_github("RetoSchmucki/rbms")
+```
+
+If you have difficulty to install the package directly, you can get the <a href="https://api.github.com/repos/RetoSchmucki/rbms/tarball/master">rbms.v_xxx.tar.gz file</a> and install from file in R or RStudio. 
+
+
+
+``` {r package_load}
+library(data.table)
+library(rbms)
+```
+
+Here we will use the count and visit data.
+
+``` {r data_load}
+b_count_sub <- readRDS("my_code/bms_workshop_data/work_count.rds")
+m_visit_sub <- readRDS("my_code/bms_workshop_data/work_visit.rds")
+```
+
+Let's first explore the data and what is in these two tables
+
+``` {r data_explore}
+library(DT)
+datatable(b_count_sub[1:50, ], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+datatable(m_visit_sub[1:50, ], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+unique(b_count_sub[ , .(bms_id, species_name)])
+unique(b_count_sub[order(year), year])
+```
+
+### Selecting species
+
+The functions available in `rbms` package work on single species and within one region. This way, the function can be run on various cluster, in parallel or in `for loops`, but this is your choice and here wi will run it for a single species in one region. 
+
+1. First let's select a species
+``` {r select_sp}
+# s_sp <- "Maniola jurtina"
+s_sp <- "Polyommatus icarus"
+region_bms <- c("NLBMS", "FRBMS")
+```
+
+In the `rbms` package, you will find two example data set with the required column names, these names are "hard coded" so they need to be exactly the same in your data sets.
+
+``` {r select_format}
+data(m_visit)
+data(m_count)
+```
+
+2. Arrange data set name to fit the functions requirements
+
+``` {r arrange_col_names}
+setnames(m_visit_sub, c("transect_id_serial", "visit_date"), c("SITE_ID", "DATE"))
+names(m_visit_sub) <- toupper(names(m_visit_sub))
+
+setnames(b_count_sub, c("transect_id_serial", "visit_date", "species_name"), c("SITE_ID", "DATE", "SPECIES"))
+names(b_count_sub) <- toupper(names(b_count_sub))
+```
+
+3. Prepare a full time-series to align count, visit, monitoring and flight curve estimate, using the function `ts_dwmy_table()`
+    - InitYear
+    - LastYear
+    - WeekDay1
+
+``` {r setup_ts_date}
+ts_date <- rbms::ts_dwmy_table(InitYear = 2008,
+                               LastYear = 2017,
+                               WeekDay1 = "monday")
+```
+
+4. Define the monitoring season with the function `ts_monit_season()`
+    - ts_date
+    - StartMonth
+    - EndMonth
+    - StartDay
+    - EndDay
+    - CompltSeason
+    - Anchor
+    - AnchorLength
+    - AnchorLag
+    - TimeUnit ("d" or "w")
+
+``` {r setup_ts_monit}
+ts_season <- rbms::ts_monit_season(ts_date, 
+                                   StartMonth = 4,
+                                   EndMonth = 9, 
+                                   StartDay = 1, 
+                                   EndDay = NULL,
+                                   CompltSeason = TRUE,
+                                   Anchor = TRUE,
+                                   AnchorLength = 2,
+                                   AnchorLag = 2,
+                                   TimeUnit = "w")
+```
+
+5. Align the site visit in the region of interest with your  monitoring season
+
+``` {r align_visit_ts_season}
+MY_visit_region <- m_visit_sub[BMS_ID %in% region_bms, ]
+ts_season_visit <- rbms::ts_monit_site(MY_visit_region, ts_season)
+```
+
+6. Align the butterfly counts recorded for the species and region of interest with your visit and monitoring season
+
+*Above, we already identified the species in the object `s_sp`.*
+
+``` {r align_count_ts_season_visit}
+MY_count_region <- b_count_sub[BMS_ID %in% region_bms, ]
+ts_season_count <- rbms::ts_monit_count_site(ts_season_visit, MY_count_region, sp = s_sp)
+```
+
+7. Estimate the flight curve for a species and region of interest, using cubic spline smoother available in the `mgcv` package.
+    - ts_season_count
+    - NbrSample
+    - MinVisit
+    - MinOccur
+    - MinNbrSite
+    - MaxTrial
+    - GamFamily
+    - SpeedGam (logical)
+    - CompltSeason (logical)
+    - SelectYear
+    - TimeUnit ("d" or "w")
+
+
+``` {r flight_curve_estimate, eval=FALSE}
+ts_flight_curve <- rbms::flight_curve(ts_season_count,
+                                            NbrSample = 500,
+                                            MinVisit = 3,
+                                            MinOccur = 2,
+                                            MinNbrSite = 5,
+                                            MaxTrial = 4,
+                                            GamFamily = "nb",
+                                            SpeedGam = FALSE,
+                                            CompltSeason = TRUE,
+                                            SelectYear = NULL,
+                                            TimeUnit = "w"
+                                            )
+
+saveRDS(ts_flight_curve, file.path("my_code/bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
+```
+
+8. Extract and plot the estimated phenology
+
+> `rbms` does not contain a plot method, so you have to make your own with your favorite tool. 
+
+*Here is an example with plot in base R - you can do better!*
+
+``` {r flight_curve_plot}
+ts_flight_curve <- readRDS(file.path("my_code/bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
+
+datatable(ts_flight_curve$pheno[1:370, .(SPECIES, M_YEAR, MONTH, trimWEEKNO, WEEK_SINCE, ANCHOR, NM)], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+
+## Extract phenology part
+pheno <- ts_flight_curve$pheno 
+
+## add the line of the first year
+yr <- unique(pheno[order(M_YEAR), as.numeric(as.character(M_YEAR))])
+
+if("trimWEEKNO" %in% names(pheno)){
+  plot(pheno[M_YEAR == yr[1], trimWEEKNO], pheno[M_YEAR == yr[1], NM], type = 'l', ylim = c(0, max(pheno[, NM])), xlab = 'Monitoring Week', ylab = 'Relative Abundance')
+} else {
+  plot(pheno[M_YEAR == yr[1], trimDAYNO], pheno[M_YEAR == yr[1], NM], type = 'l', ylim = c(0, max(pheno[, NM])), xlab = 'Monitoring Day', ylab = 'Relative Abundance')
+
+}
+
+## add individual curves for additional years
+if(length(yr) > 1) {
+i <- 2
+  for(y in yr[-1]){
+    if("trimWEEKNO" %in% names(pheno)){
+      points(pheno[M_YEAR == y , trimWEEKNO], pheno[M_YEAR == y, NM], type = 'l', col = i)
+    } else {
+      points(pheno[M_YEAR == y, trimDAYNO], pheno[M_YEAR == y, NM], type = 'l', col = i)
+    }
+    i <- i + 1
+  }
+}
+
+## add legend
+legend('topright', legend = c(yr), col = c(seq_along(c(yr))), lty = 1, bty = 'n')
+```

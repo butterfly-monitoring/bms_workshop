@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Reto Schmucki" />
+
+<meta name="date" content="2020-03-29" />
+
+<title>Exploring the data.table package</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BMS Workshop</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    WS1
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="data_wrangling.html">data wrangling</a>
+    </li>
+    <li>
+      <a href="mapping_site_geoclimate.html">mapping</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    WS2
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="flight_curve_presentation.html">Phenology and GAI</a>
+    </li>
+    <li>
+      <a href="flight_curve_computing.html">Estimating phenology</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    WS3
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="site_indices.html">Site and Collated Index</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    WS4
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="species_trends.html">Species trends</a>
+    </li>
+    <li>
+      <a href="multispecies_indicators.html">Multispecies indicators</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Exploring the data.table package</h1>
+<h4 class="author">Reto Schmucki</h4>
+<h4 class="date">29 March 2020</h4>
+
+</div>
+
+
+<div id="data.table-package" class="section level3">
+<h3>data.table package</h3>
+<p>Under the hood, many function of operation included in the rbms package are done using the <code>data.table</code> package. The <a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">data.table</a> package offer fast and powerful operation on large data set with a very compact syntax.</p>
+<hr />
+<p>In this session, you will:</p>
+<ol style="list-style-type: decimal">
+<li>read csv file with data.table</li>
+<li>merge data set with one or multiple key</li>
+<li>rename column names</li>
+<li>extract basic statistics</li>
+</ol>
+<hr />
+<p>You will need to load the following R packages and the data found in the bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">downloaded here</a>. Once you have downloaded the data, unzip the folder and add the data in your R project directory, your current R working directory, or set your working directly accordingly <code>setwd()</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(data.table)</span></code></pre></div>
+<p>All data are stored in <code>rds</code> format, this format is highly efficient for storing R object, but you could also have them in any other format. To load <code>.rds data</code>, we use the function <code>readRDS()</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>b_count_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;my_code/bms_workshop_data/work_count.rds&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>m_visit_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;my_code/bms_workshop_data/work_visit.rds&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>m_site_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;my_code/bms_workshop_data/work_site.rds&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">## to read csv into a data.table use fread()</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a>bcz_class &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">fread</span>(<span class="st">&quot;my_code/bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>b_count_sub</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial visit_date year month day       species_name
+##     1:  FRBMS            FRBMS.1 2009-05-22 2009     5  22    Maniola jurtina
+##     2:  FRBMS            FRBMS.1 2009-08-01 2009     8   1    Maniola jurtina
+##     3:  FRBMS            FRBMS.1 2009-08-01 2009     8   1 Polyommatus icarus
+##     4:  FRBMS            FRBMS.1 2009-09-19 2009     9  19 Polyommatus icarus
+##     5:  FRBMS            FRBMS.1 2010-07-02 2010     7   2    Maniola jurtina
+##    ---                                                                       
+## 59598:  UKBMS          UKBMS.300 2018-07-03 2018     7   3    Maniola jurtina
+## 59599:  UKBMS          UKBMS.300 2018-07-10 2018     7  10    Maniola jurtina
+## 59600:  UKBMS          UKBMS.300 2018-07-16 2018     7  16    Maniola jurtina
+## 59601:  UKBMS          UKBMS.300 2018-07-16 2018     7  16 Polyommatus icarus
+## 59602:  UKBMS          UKBMS.300 2018-07-23 2018     7  23    Maniola jurtina
+##        count
+##     1:     5
+##     2:     5
+##     3:     2
+##     4:     6
+##     5:    20
+##    ---      
+## 59598:    26
+## 59599:    16
+## 59600:     5
+## 59601:     1
+## 59602:     2</code></pre>
+<p>When you look at a data.table object, you can will see the first and last five row, with all column names.</p>
+<ol style="list-style-type: decimal">
+<li>You can access specific column the same way as you would do with a data.frame with the $ sign or a vector of names such as c(“col1”, “col2, …,”col7").</li>
+<li>You can subset the data.table with an logical argument of indices in the first position after the square bracket (e.g my_data_table[ col1 &lt;= 453, ])</li>
+<li>You can create new column with the “:=” symbol and a function (e.g. my_data_table[col1 &lt;= 453, new_col := mean(col1)])</li>
+<li>You can compute operation by group using a “by” argument in third position within the square brackets (e.g. my_data_table[col1 &lt;= 453, new_col := mean(col1), by = col3])</li>
+</ol>
+</div>
+<div id="extract-columns" class="section level3">
+<h3>Extract columns</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>my_new_dt &lt;-<span class="st"> </span>b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
+<span id="cb4-2"><a href="#cb4-2"></a>my_new_dt</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial year visit_date
+##     1:  FRBMS            FRBMS.1 2009 2009-05-22
+##     2:  FRBMS            FRBMS.1 2009 2009-08-01
+##     3:  FRBMS            FRBMS.1 2009 2009-08-01
+##     4:  FRBMS            FRBMS.1 2009 2009-09-19
+##     5:  FRBMS            FRBMS.1 2010 2010-07-02
+##    ---                                          
+## 59598:  UKBMS          UKBMS.300 2018 2018-07-03
+## 59599:  UKBMS          UKBMS.300 2018 2018-07-10
+## 59600:  UKBMS          UKBMS.300 2018 2018-07-16
+## 59601:  UKBMS          UKBMS.300 2018 2018-07-16
+## 59602:  UKBMS          UKBMS.300 2018 2018-07-23</code></pre>
+</div>
+<div id="extract-unique" class="section level3">
+<h3>Extract unique</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">unique</span>(my_new_dt<span class="op">$</span>bms_id)</span></code></pre></div>
+<pre><code>## [1] &quot;FRBMS&quot; &quot;NLBMS&quot; &quot;UKBMS&quot;</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
+<pre><code>##     bms_id year
+##  1:  FRBMS 2009
+##  2:  FRBMS 2010
+##  3:  FRBMS 2011
+##  4:  FRBMS 2012
+##  5:  FRBMS 2013
+##  6:  FRBMS 2014
+##  7:  FRBMS 2015
+##  8:  FRBMS 2017
+##  9:  FRBMS 2018
+## 10:  FRBMS 2016
+## 11:  FRBMS 2008
+## 12:  NLBMS 2008
+## 13:  NLBMS 2009
+## 14:  NLBMS 2010
+## 15:  NLBMS 2011
+## 16:  NLBMS 2012
+## 17:  NLBMS 2013
+## 18:  NLBMS 2014
+## 19:  NLBMS 2015
+## 20:  NLBMS 2016
+## 21:  NLBMS 2017
+## 22:  NLBMS 2018
+## 23:  UKBMS 2008
+## 24:  UKBMS 2009
+## 25:  UKBMS 2010
+## 26:  UKBMS 2011
+## 27:  UKBMS 2012
+## 28:  UKBMS 2013
+## 29:  UKBMS 2014
+## 30:  UKBMS 2015
+## 31:  UKBMS 2016
+## 32:  UKBMS 2017
+## 33:  UKBMS 2018
+##     bms_id year</code></pre>
+</div>
+<div id="subset" class="section level3">
+<h3>Subset</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_new_dt[bms_id <span class="op">==</span><span class="st"> &quot;NLBMS&quot;</span>, ]</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial year visit_date
+##     1:  NLBMS            NLBMS.1 2008 2008-05-23
+##     2:  NLBMS            NLBMS.1 2008 2008-06-07
+##     3:  NLBMS            NLBMS.1 2008 2008-07-26
+##     4:  NLBMS            NLBMS.1 2008 2008-07-26
+##     5:  NLBMS            NLBMS.1 2008 2008-08-15
+##    ---                                          
+## 26200:  NLBMS          NLBMS.300 2016 2016-07-03
+## 26201:  NLBMS          NLBMS.300 2016 2016-07-25
+## 26202:  NLBMS          NLBMS.300 2017 2017-06-26
+## 26203:  NLBMS          NLBMS.300 2017 2017-07-14
+## 26204:  NLBMS          NLBMS.300 2018 2018-06-15</code></pre>
+</div>
+<div id="work-with-date" class="section level3">
+<h3>Work with date</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_new_dt[ , month <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">month</span>(visit_date)][ , <span class="kw">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span>.(<span class="kw">mday</span>(visit_date), <span class="kw">year</span>(visit_date))]</span>
+<span id="cb12-2"><a href="#cb12-2"></a>my_new_dt</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial year visit_date month day
+##     1:  FRBMS            FRBMS.1 2009 2009-05-22     5  22
+##     2:  FRBMS            FRBMS.1 2009 2009-08-01     8   1
+##     3:  FRBMS            FRBMS.1 2009 2009-08-01     8   1
+##     4:  FRBMS            FRBMS.1 2009 2009-09-19     9  19
+##     5:  FRBMS            FRBMS.1 2010 2010-07-02     7   2
+##    ---                                                    
+## 59598:  UKBMS          UKBMS.300 2018 2018-07-03     7   3
+## 59599:  UKBMS          UKBMS.300 2018 2018-07-10     7  10
+## 59600:  UKBMS          UKBMS.300 2018 2018-07-16     7  16
+## 59601:  UKBMS          UKBMS.300 2018 2018-07-16     7  16
+## 59602:  UKBMS          UKBMS.300 2018 2018-07-23     7  23</code></pre>
+</div>
+<div id="count-object" class="section level3">
+<h3>Count object</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_new_dt[ , .N, by =<span class="st"> </span>bms_id]</span></code></pre></div>
+<pre><code>##    bms_id     N
+## 1:  FRBMS  1074
+## 2:  NLBMS 26204
+## 3:  UKBMS 32324</code></pre>
+</div>
+<div id="rename-column" class="section level3">
+<h3>rename column</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">## change names</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="kw">setnames</span>(b_count_sub, <span class="kw">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="kw">names</span>(b_count_sub) &lt;-<span class="st"> </span><span class="kw">toupper</span>(<span class="kw">names</span>(b_count_sub))</span>
+<span id="cb16-5"><a href="#cb16-5"></a>b_count_sub</span></code></pre></div>
+<pre><code>##        BMS_ID   SITE_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
+##     1:  FRBMS   FRBMS.1 2009-05-22 2009     5  22    Maniola jurtina     5
+##     2:  FRBMS   FRBMS.1 2009-08-01 2009     8   1    Maniola jurtina     5
+##     3:  FRBMS   FRBMS.1 2009-08-01 2009     8   1 Polyommatus icarus     2
+##     4:  FRBMS   FRBMS.1 2009-09-19 2009     9  19 Polyommatus icarus     6
+##     5:  FRBMS   FRBMS.1 2010-07-02 2010     7   2    Maniola jurtina    20
+##    ---                                                                    
+## 59598:  UKBMS UKBMS.300 2018-07-03 2018     7   3    Maniola jurtina    26
+## 59599:  UKBMS UKBMS.300 2018-07-10 2018     7  10    Maniola jurtina    16
+## 59600:  UKBMS UKBMS.300 2018-07-16 2018     7  16    Maniola jurtina     5
+## 59601:  UKBMS UKBMS.300 2018-07-16 2018     7  16 Polyommatus icarus     1
+## 59602:  UKBMS UKBMS.300 2018-07-23 2018     7  23    Maniola jurtina     2</code></pre>
+</div>
+<div id="merge-data-sets" class="section level3">
+<h3>Merge data sets</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co">## merge data set</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="kw">setkey</span>(b_count_sub, SITE_ID)</span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="kw">setkey</span>(m_site_sub, SITE_ID)</span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="kw">merge</span>(b_count_sub, m_site_sub[bms_id <span class="op">==</span><span class="st"> &quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
+<pre><code>##       SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
+##    1: FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
+##    2: FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
+##    3: FRBMS.1  FRBMS 2009-08-01 2009     8   1 Polyommatus icarus     2
+##    4: FRBMS.1  FRBMS 2009-09-19 2009     9  19 Polyommatus icarus     6
+##    5: FRBMS.1  FRBMS 2010-07-02 2010     7   2    Maniola jurtina    20
+##   ---                                                                  
+## 1070: FRBMS.9  FRBMS 2014-07-18 2014     7  18    Maniola jurtina    30
+## 1071: FRBMS.9  FRBMS 2014-08-21 2014     8  21    Maniola jurtina    33
+## 1072: FRBMS.9  FRBMS 2014-08-21 2014     8  21 Polyommatus icarus     6
+## 1073: FRBMS.9  FRBMS 2014-09-16 2014     9  16    Maniola jurtina     2
+## 1074: FRBMS.9  FRBMS 2014-09-16 2014     9  16 Polyommatus icarus    18
+##       transect_lon_1km transect_lat_1km
+##    1:          3953000          2967000
+##    2:          3953000          2967000
+##    3:          3953000          2967000
+##    4:          3953000          2967000
+##    5:          3953000          2967000
+##   ---                                  
+## 1070:          3737000          2835000
+## 1071:          3737000          2835000
+## 1072:          3737000          2835000
+## 1073:          3737000          2835000
+## 1074:          3737000          2835000</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">merge</span>(b_count_sub, m_site_sub[bms_id <span class="op">==</span><span class="st"> &quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##         SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
+##     1:  FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
+##     2:  FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
+##     3:  FRBMS.1  FRBMS 2009-08-01 2009     8   1 Polyommatus icarus     2
+##     4:  FRBMS.1  FRBMS 2009-09-19 2009     9  19 Polyommatus icarus     6
+##     5:  FRBMS.1  FRBMS 2010-07-02 2010     7   2    Maniola jurtina    20
+##    ---                                                                   
+## 59598: UKBMS.99  UKBMS 2018-08-28 2018     8  28 Polyommatus icarus     8
+## 59599: UKBMS.99  UKBMS 2018-09-02 2018     9   2    Maniola jurtina    25
+## 59600: UKBMS.99  UKBMS 2018-09-02 2018     9   2 Polyommatus icarus     7
+## 59601: UKBMS.99  UKBMS 2018-10-01 2018    10   1    Maniola jurtina    14
+## 59602: UKBMS.99  UKBMS 2018-10-01 2018    10   1 Polyommatus icarus     2
+##        transect_lon_1km transect_lat_1km
+##     1:          3953000          2967000
+##     2:          3953000          2967000
+##     3:          3953000          2967000
+##     4:          3953000          2967000
+##     5:          3953000          2967000
+##    ---                                  
+## 59598:               NA               NA
+## 59599:               NA               NA
+## 59600:               NA               NA
+## 59601:               NA               NA
+## 59602:               NA               NA</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>data_m &lt;-<span class="st"> </span><span class="kw">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2"></a>data_m</span></code></pre></div>
+<pre><code>##         SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
+##     1:  FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
+##     2:  FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
+##     3:  FRBMS.1  FRBMS 2009-08-01 2009     8   1 Polyommatus icarus     2
+##     4:  FRBMS.1  FRBMS 2009-09-19 2009     9  19 Polyommatus icarus     6
+##     5:  FRBMS.1  FRBMS 2010-07-02 2010     7   2    Maniola jurtina    20
+##    ---                                                                   
+## 59598: UKBMS.99  UKBMS 2018-08-28 2018     8  28 Polyommatus icarus     8
+## 59599: UKBMS.99  UKBMS 2018-09-02 2018     9   2    Maniola jurtina    25
+## 59600: UKBMS.99  UKBMS 2018-09-02 2018     9   2 Polyommatus icarus     7
+## 59601: UKBMS.99  UKBMS 2018-10-01 2018    10   1    Maniola jurtina    14
+## 59602: UKBMS.99  UKBMS 2018-10-01 2018    10   1 Polyommatus icarus     2
+##        transect_lon_1km transect_lat_1km
+##     1:          3953000          2967000
+##     2:          3953000          2967000
+##     3:          3953000          2967000
+##     4:          3953000          2967000
+##     5:          3953000          2967000
+##    ---                                  
+## 59598:          3604000          3177000
+## 59599:          3604000          3177000
+## 59600:          3604000          3177000
+## 59601:          3604000          3177000
+## 59602:          3604000          3177000</code></pre>
+<p>There is many way to manipulate tabular data sets in R, dplyr and data.table are especially efficient with large data set, data.table can manipulate millions of row with ease. Learn one of these tool will help you seriously in every R task and analysis as 80% of the work is to organize the data to make them fit for the analysis or build a graph.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

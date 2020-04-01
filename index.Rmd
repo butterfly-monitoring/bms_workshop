@@ -22,13 +22,13 @@ In the ABLE project new tools have been developed to make it easier for regional
 |--------------|-----------------------------------------------------------------------|---------------|
 |9:30  - 9:40  | login to virtual workshop (Zoom meeting)                              | David         |
 |9:40  - 10:00 | Introduction and participant presentation                             | Chris         |
-|10:00 - 11:00 | [BMS and count data in R](example1.html)                              | Reto          |
+|10:00 - 11:00 | [BMS and count data in R, data wrangling and mapping](data_wrangling.html) | Reto     |
 |Break         |                                                                       |               |
-|11:15 - 12:15 | [Modelling Butterfly Abundance (GAI)](example1.html)                  | Emily         |
+|11:15 - 12:15 | [Modelling Butterfly Abundance (GAI)](flight_curve_presentation.html) | Emily         |
 |Lunch         |                                                                       |               |
-|13:30 - 14:30 | [Flight curve & Site indices ](example1.html)                         | Reto          |
+|13:30 - 14:30 | [Flight curve](flight_curve_computing.html) and [Site & collated indices](site_indices.html)   | Reto          |
 |Break         |                                                                       |               |
-|14:45 - 15:45 | [Collated indices, Trends, CI & Multi-Species Indices](example1.html) | Reto & Emily  |
+|14:45 - 15:45 | [Trends](species_trends.html) and [Multi-Species Indices](multispecies_indicators.html)   | Emily  |
 |Break         |                                                                       |               |
 |Q&A (30 min)  |                                                                       | Reto, Emily, David & Chris |
 |              |                                                                       |               |

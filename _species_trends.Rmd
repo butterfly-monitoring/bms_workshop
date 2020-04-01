@@ -1,0 +1,63 @@
+---
+title: "Calculating species trends"
+author: "Emily Dennis"
+date: "31 March 2020"
+output: 
+    html_document:
+     toc: true
+     toc_float: true
+     code_folding: "hide"
+---
+
+
+Source trend functions required
+```{r source_functions, eval=FALSE}
+source("workshop_functions.R")
+```
+
+
+Read in collated indices for species and BMS of interest
+```{r eval=FALSE}
+# Specify the species - note the underscore
+spp <- "Maniola_jurtina"
+# Specify the BMS
+bms <- "UKBMS"
+# Read in the bootstrapped collated indices
+co_index <- readRDS(paste0("./data/", spp, "_co_index_boot.rds"))
+# Filter to a single BMS to focus upon
+co_index <- co_index[BMS_ID == bms]
+```
+
+Convert to log 10 collated indices (TRMOBS) 
+```{r eval=FALSE}
+co_index[, LOGDENSITY:= log(COL_INDEX)/log(10)][, TRMOBS := LOGDENSITY - mean(LOGDENSITY) + 2, by = .(BOOTi)]
+```
+
+Estimate and classify species trends with a confidence interval based on the bootstraps
+```{r eval=FALSE}
+sp_trend <- estimate_boot_trends(co_index)
+sp_trend
+```
+
+
+Plot the species log collated index with bootstrapped 95% confidence interval and linear trend line (in red)
+```{r eval=FALSE}
+# Calculate mean log index for original data
+co_index0_mean <- mean(co_index[BOOTi == 0]$LOGDENSITY)
+# Derive interval from quantiles
+co_index_ci <- merge(co_index[BOOTi == 0, .(M_YEAR, TRMOBS, BMS_ID)],
+                        co_index[BOOTi != 0, .(LOWER = quantile(LOGDENSITY - co_index0_mean + 2, 0.025),
+                          UPPER = quantile(LOGDENSITY - co_index0_mean + 2, 0.975)), by = .(BMS_ID, M_YEAR)],
+                        by=c("BMS_ID","M_YEAR"))
+
+
+ggplot(co_index_ci, aes(M_YEAR, TRMOBS))+
+  theme(text = element_text(size = 14))+
+  geom_line()+
+  geom_point()+
+  geom_ribbon(aes(ymin = LOWER, ymax = UPPER), alpha = .3)+
+  geom_smooth(method="lm", se=FALSE, color="red")+
+  xlab("Year")+ylab(expression('log '['(10)']*' Collated Index'))+
+  ggtitle(paste("Collated index for", gsub("_", " ", spp), "in", bms))
+
+```
