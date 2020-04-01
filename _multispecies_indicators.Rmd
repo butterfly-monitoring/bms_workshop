@@ -10,13 +10,13 @@ output:
 ---
 
 Source functions required
-```{r source functions eval=FALSE}
+``` {r source_functions}
 source("workshop_functions.R")
 ```
 
 
 Read in collated indices for 2 species and filter to one BMS
-```{r eval=FALSE}
+``` {r collated_index}
 bms <- "UKBMS"
 co_index <- rbind(readRDS("my_code/bms_workshop_data/Maniola_jurtina_co_index_boot.rds"),
                   readRDS("my_code/bms_workshop_data/Polyommatus_icarus_co_index_boot.rds"))
@@ -24,12 +24,12 @@ co_index <- co_index[BMS_ID == bms]
 ```
 
 Convert to log 10 collated indices (TRMOBS) 
-```{r eval=FALSE}
+``` {r MSI_log10}
 co_index[, LOGDENSITY:= log(COL_INDEX)/log(10)][, TRMOBS := LOGDENSITY - mean(LOGDENSITY) + 2, by = .(SPECIES, BOOTi)]
 ```
 
 Calculate and plot the indicator, where the confidence interval is based on the bootstraps
-```{r eval=FALSE}
+``` {r MSI_figure}
 # Generate the indicator for real data
 msi <- produce_indicator0(co_index[BOOTi == 0])
 # Generate an indicator for each bootstrap

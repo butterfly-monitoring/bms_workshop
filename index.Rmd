@@ -38,7 +38,7 @@ In the ABLE project new tools have been developed to make it easier for regional
 
 <br>
 
-## Before the workshop
+### Before the workshop
 
 <br>
 
@@ -60,18 +60,19 @@ install.packages("sf")
 install.packages("raster")
 install.packages("rasterVis")
 install.packages("tmap")
+install.packages("DT")
 ## rbms from GitHub
 devtools::install_github("RetoSchmucki/rbms")
 
 ```
 <br>
 
-#### Download Data
+### Download Data
 <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip"><b>WORKSHOP DATA</b></a>
 
 <br>
 
-#### Reading
+### Reading
 
 **Dennis, E. B.**, Morgan, B. J. T., Freeman, S. N., Brereton, T. M., & Roy, D. B. (2016). A generalized abundance index for seasonal invertebrates. Biometrics, 72(4), 1305–1314. doi: 10.1111/biom.12506
 

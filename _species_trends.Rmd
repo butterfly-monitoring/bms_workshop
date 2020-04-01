@@ -11,13 +11,14 @@ output:
 
 
 Source trend functions required
-```{r source_functions, eval=FALSE}
+
+``` {r source_functions}
 source("workshop_functions.R")
 ```
 
 
 Read in collated indices for species and BMS of interest
-```{r eval=FALSE}
+``` {r collated_index_bms}
 # Specify the species - note the underscore
 spp <- "Maniola_jurtina"
 # Specify the BMS
@@ -29,19 +30,19 @@ co_index <- co_index[BMS_ID == bms]
 ```
 
 Convert to log 10 collated indices (TRMOBS) 
-```{r eval=FALSE}
+``` {r log10}
 co_index[, LOGDENSITY:= log(COL_INDEX)/log(10)][, TRMOBS := LOGDENSITY - mean(LOGDENSITY) + 2, by = .(BOOTi)]
 ```
 
 Estimate and classify species trends with a confidence interval based on the bootstraps
-```{r eval=FALSE}
+``` {r species_trend}
 sp_trend <- estimate_boot_trends(co_index)
 sp_trend
 ```
 
 
 Plot the species log collated index with bootstrapped 95% confidence interval and linear trend line (in red)
-```{r eval=FALSE}
+``` {r log10_CI}
 # Calculate mean log index for original data
 co_index0_mean <- mean(co_index[BOOTi == 0]$LOGDENSITY)
 # Derive interval from quantiles

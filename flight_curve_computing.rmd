@@ -9,7 +9,7 @@ output:
     code_folding: "hide"
 ---
 
-### Implementing the GAI
+### Generalized Abundance Index (1)
 
 Here you we will use the `rbms` package to estimate a regional flight curve for two different species, *Maniola jurtina* and *Polyommatus icarus*. We will use a subset of real data over 10 years, extracted from the eBMS database and generously provided by our colleagues in France, the UK and the Netherlands. The data have been anonymized and their spatial resolution limited to 1km accuracy, but the count are real, including the noise.
 

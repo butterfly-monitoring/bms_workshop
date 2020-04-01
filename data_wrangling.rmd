@@ -9,7 +9,7 @@ output:
     code_folding: "hide"
 ---
 
-### data.table package
+### Using data.table R package
 
 Under the hood, many function of operation included in the rbms package are done using the `data.table` package. The <a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">data.table</a> package offer fast and powerful operation on large data set with a very compact syntax. 
 
@@ -86,7 +86,6 @@ setnames(b_count_sub, c("species_name", "bms_id"), c("SPECIES", "BMS_ID"))
 names(b_count_sub) <- toupper(names(b_count_sub))
 b_count_sub
 ```
-
 
 ### Merge data sets
 ``` {r manipulate_data.table_merge}
