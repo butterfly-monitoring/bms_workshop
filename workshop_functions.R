@@ -374,8 +374,8 @@ estimate_ind_trends <- function(msi0, msi_boot){
   
   msi0_10 <- msi0[year %in%  tail(msi0$year,10)]  
   
-  # Fit linear model
-  lm_obj <- try(lm(log(indicator) ~ year, msi0), silent = TRUE)
+  # Fit linear model to smoothed indicator
+  lm_obj <- try(lm(log(SMOOTH) ~ year, msi0), silent = TRUE)
   
   
   msi_trend <- data.frame(rate_lt = ifelse(class(lm_obj) != "try-error", 
@@ -388,7 +388,7 @@ estimate_ind_trends <- function(msi0, msi_boot){
   
   
   if(length(minyear:maxyear) > 10){
-    lm_obj10 <- try(lm(log(indicator) ~ year, msi0_10), silent = TRUE)
+    lm_obj10 <- try(lm(log(SMOOTH) ~ year, msi0_10), silent = TRUE)
     
     msi_trend$rate_10y <- ifelse(class(lm_obj10) != "try-error", 
                       exp(coef(lm_obj10)[2]), NA)
