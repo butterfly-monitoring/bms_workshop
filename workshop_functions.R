@@ -419,7 +419,7 @@ estimate_ind_trends <- function(msi0, msi_boot){
   msi_trends_ci <- trend_class_func(msi_trends_ci,
                                     tcol = "TrendClass_lt")
   # Classify 10 years trends
-  if("TrendClass_10y" %in% colnames(msi_trends_ci))
+  if("rate_10y" %in% colnames(msi_trends_ci))
     msi_trends_ci <- trend_class_func(msi_trends_ci, 
                                     tcol = "TrendClass_10y", 
                                     low = "rate_10y_low", 
