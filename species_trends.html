@@ -15,21 +15,46 @@
 
 <title>Calculating species trends</title>
 
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="site_libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -125,39 +150,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -168,10 +163,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -188,40 +179,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -249,7 +213,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -261,7 +225,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -272,10 +236,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -287,7 +264,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -416,7 +392,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -507,11 +483,11 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -527,17 +503,17 @@ div.tocify {
 
 
 <p>Source trend functions required that you can download from <a href="workshop_functions.R"><strong>this link</strong></a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">source</span>(<span class="st">&quot;workshop_functions.R&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;workshop_functions.R&quot;</span>)</span></code></pre></div>
 <p>Read in collated indices for species and BMS of interest</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Specify the species - note the underscore</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>spp &lt;-<span class="st"> &quot;Maniola_jurtina&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co"># Specify the BMS</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>bms &lt;-<span class="st"> &quot;UKBMS&quot;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># Read in the bootstrapped collated indices</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>co_index &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="kw">paste0</span>(<span class="st">&quot;./bms_workshop_data/&quot;</span>, spp, <span class="st">&quot;_co_index_boot.rds&quot;</span>))</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># Filter to a single BMS to focus upon</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>co_index &lt;-<span class="st"> </span>co_index[BMS_ID <span class="op">==</span><span class="st"> </span>bms]</span>
-<span id="cb2-9"><a href="#cb2-9"></a>co_index</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the species - note the underscore</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>spp <span class="ot">&lt;-</span> <span class="st">&quot;Maniola_jurtina&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the BMS</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bms <span class="ot">&lt;-</span> <span class="st">&quot;UKBMS&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the bootstrapped collated indices</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>co_index <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">paste0</span>(<span class="st">&quot;./bms_workshop_data/&quot;</span>, spp, <span class="st">&quot;_co_index_boot.rds&quot;</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to a single BMS to focus upon</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>co_index <span class="ot">&lt;-</span> co_index[BMS_ID <span class="sc">==</span> bms]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##       BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID         SPECIES
 ##    1:     0   2008   155       154  343.0026  UKBMS Maniola jurtina
 ##    2:     0   2009   216       215  316.9605  UKBMS Maniola jurtina
@@ -551,8 +527,8 @@ div.tocify {
 ## 5009:   500   2016   161       261  308.2660  UKBMS Maniola jurtina
 ## 5010:   500   2017   148       233  471.5391  UKBMS Maniola jurtina</code></pre>
 <p>Convert to log 10 collated indices (TRMOBS)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>co_index[, LOGDENSITY<span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">log</span>(COL_INDEX)<span class="op">/</span><span class="kw">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="op">:</span><span class="er">=</span><span class="st"> </span>LOGDENSITY <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(LOGDENSITY) <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, by =<span class="st"> </span>.(BOOTi)]</span>
-<span id="cb4-2"><a href="#cb4-2"></a>co_index</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>co_index[, LOGDENSITY<span class="sc">:</span><span class="er">=</span> <span class="fu">log</span>(COL_INDEX)<span class="sc">/</span><span class="fu">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="sc">:</span><span class="er">=</span> LOGDENSITY <span class="sc">-</span> <span class="fu">mean</span>(LOGDENSITY) <span class="sc">+</span> <span class="dv">2</span>, by <span class="ot">=</span> .(BOOTi)]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##       BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID         SPECIES LOGDENSITY
 ##    1:     0   2008   155       154  343.0026  UKBMS Maniola jurtina   2.535297
 ##    2:     0   2009   216       215  316.9605  UKBMS Maniola jurtina   2.501005
@@ -578,30 +554,31 @@ div.tocify {
 ## 5009: 1.959416
 ## 5010: 2.144008</code></pre>
 <p>Estimate and classify species trends with a confidence interval based on the bootstraps</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>sp_trend &lt;-<span class="st"> </span><span class="kw">estimate_boot_trends</span>(co_index)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>sp_trend</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sp_trend <span class="ot">&lt;-</span> <span class="fu">estimate_boot_trends</span>(co_index)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sp_trend</span></code></pre></div>
 <pre><code>##   data_from data_to data_nyears minyear maxyear  n nboot_lt rate_lt rate_lt_low
 ## 0      2008    2017          10    2008    2017 10      500 1.03176    1.018995
 ##   rate_lt_upp   pcn_lt     TrendClass_lt
 ## 0    1.044679 32.49766 Moderate increase</code></pre>
 <p>Plot the species log collated index with bootstrapped 95% confidence interval and linear trend line (in red)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Calculate mean log index for original data</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>co_index0_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(co_index[BOOTi <span class="op">==</span><span class="st"> </span><span class="dv">0</span>]<span class="op">$</span>LOGDENSITY)</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># Derive interval from quantiles</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>co_index_ci &lt;-<span class="st"> </span><span class="kw">merge</span>(co_index[BOOTi <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, .(M_YEAR, TRMOBS, BMS_ID)],</span>
-<span id="cb8-5"><a href="#cb8-5"></a>                        co_index[BOOTi <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>, .(<span class="dt">LOWER =</span> <span class="kw">quantile</span>(LOGDENSITY <span class="op">-</span><span class="st"> </span>co_index0_mean <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="fl">0.025</span>),</span>
-<span id="cb8-6"><a href="#cb8-6"></a>                          <span class="dt">UPPER =</span> <span class="kw">quantile</span>(LOGDENSITY <span class="op">-</span><span class="st"> </span>co_index0_mean <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="fl">0.975</span>)), <span class="dt">by =</span> .(BMS_ID, M_YEAR)],</span>
-<span id="cb8-7"><a href="#cb8-7"></a>                        <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;BMS_ID&quot;</span>,<span class="st">&quot;M_YEAR&quot;</span>))</span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a></span>
-<span id="cb8-10"><a href="#cb8-10"></a><span class="kw">ggplot</span>(co_index_ci, <span class="kw">aes</span>(M_YEAR, TRMOBS))<span class="op">+</span></span>
-<span id="cb8-11"><a href="#cb8-11"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">14</span>))<span class="op">+</span></span>
-<span id="cb8-12"><a href="#cb8-12"></a><span class="st">  </span><span class="kw">geom_line</span>()<span class="op">+</span></span>
-<span id="cb8-13"><a href="#cb8-13"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> LOWER, <span class="dt">ymax =</span> UPPER), <span class="dt">alpha =</span> <span class="fl">.3</span>)<span class="op">+</span></span>
-<span id="cb8-15"><a href="#cb8-15"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>, <span class="dt">color=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></span>
-<span id="cb8-16"><a href="#cb8-16"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Year&quot;</span>)<span class="op">+</span><span class="kw">ylab</span>(<span class="kw">expression</span>(<span class="st">&#39;log &#39;</span>[<span class="st">&#39;(10)&#39;</span>]<span class="op">*</span><span class="st">&#39; Collated Index&#39;</span>))<span class="op">+</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Collated index for&quot;</span>, <span class="kw">gsub</span>(<span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>, spp), <span class="st">&quot;in&quot;</span>, bms))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean log index for original data</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>co_index0_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(co_index[BOOTi <span class="sc">==</span> <span class="dv">0</span>]<span class="sc">$</span>LOGDENSITY)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Derive interval from quantiles</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>co_index_ci <span class="ot">&lt;-</span> <span class="fu">merge</span>(co_index[BOOTi <span class="sc">==</span> <span class="dv">0</span>, .(M_YEAR, TRMOBS, BMS_ID)],</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                        co_index[BOOTi <span class="sc">!=</span> <span class="dv">0</span>, .(<span class="at">LOWER =</span> <span class="fu">quantile</span>(LOGDENSITY <span class="sc">-</span> co_index0_mean <span class="sc">+</span> <span class="dv">2</span>, <span class="fl">0.025</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">UPPER =</span> <span class="fu">quantile</span>(LOGDENSITY <span class="sc">-</span> co_index0_mean <span class="sc">+</span> <span class="dv">2</span>, <span class="fl">0.975</span>)), <span class="at">by =</span> .(BMS_ID, M_YEAR)],</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;BMS_ID&quot;</span>,<span class="st">&quot;M_YEAR&quot;</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(co_index_ci, <span class="fu">aes</span>(M_YEAR, TRMOBS))<span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>))<span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> LOWER, <span class="at">ymax =</span> UPPER), <span class="at">alpha =</span> .<span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">&quot;lm&quot;</span>, <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">color=</span><span class="st">&quot;red&quot;</span>)<span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Year&quot;</span>)<span class="sc">+</span><span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="st">&#39;log &#39;</span>[<span class="st">&#39;(10)&#39;</span>]<span class="sc">*</span><span class="st">&#39; Collated Index&#39;</span>))<span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Collated index for&quot;</span>, <span class="fu">gsub</span>(<span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>, spp), <span class="st">&quot;in&quot;</span>, bms))</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="species_trends_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 
 
@@ -615,7 +592,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -633,7 +610,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -648,6 +625,9 @@ $(document).ready(function () {
 <script>
 $(document).ready(function ()  {
 
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
         .removeClass('toc-ignore')
@@ -659,7 +639,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0

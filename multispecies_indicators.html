@@ -15,21 +15,46 @@
 
 <title>Multi-species indicators</title>
 
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="site_libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -125,39 +150,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -168,10 +163,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -188,40 +179,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -249,7 +213,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -261,7 +225,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -272,10 +236,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -287,7 +264,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -416,7 +392,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -507,11 +483,11 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -527,13 +503,13 @@ div.tocify {
 
 
 <p>Source trend functions required that you can download from <a href="workshop_functions.R"><strong>this link</strong></a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">source</span>(<span class="st">&quot;workshop_functions.R&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;workshop_functions.R&quot;</span>)</span></code></pre></div>
 <p>Read in collated indices for two species and filter to one BMS</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>bms &lt;-<span class="st"> &quot;UKBMS&quot;</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>co_index &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw">readRDS</span>(<span class="st">&quot;./bms_workshop_data/Maniola_jurtina_co_index_boot.rds&quot;</span>),</span>
-<span id="cb2-3"><a href="#cb2-3"></a>                  <span class="kw">readRDS</span>(<span class="st">&quot;./bms_workshop_data/Polyommatus_icarus_co_index_boot.rds&quot;</span>))</span>
-<span id="cb2-4"><a href="#cb2-4"></a>co_index &lt;-<span class="st"> </span>co_index[BMS_ID <span class="op">==</span><span class="st"> </span>bms]</span>
-<span id="cb2-5"><a href="#cb2-5"></a>co_index</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bms <span class="ot">&lt;-</span> <span class="st">&quot;UKBMS&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>co_index <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">readRDS</span>(<span class="st">&quot;./bms_workshop_data/Maniola_jurtina_co_index_boot.rds&quot;</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">readRDS</span>(<span class="st">&quot;./bms_workshop_data/Polyommatus_icarus_co_index_boot.rds&quot;</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>co_index <span class="ot">&lt;-</span> co_index[BMS_ID <span class="sc">==</span> bms]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##        BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID            SPECIES
 ##     1:     0   2008   155       154 343.00258  UKBMS    Maniola jurtina
 ##     2:     0   2009   216       215 316.96054  UKBMS    Maniola jurtina
@@ -547,8 +523,8 @@ div.tocify {
 ## 10019:   500   2016   139       158  26.61983  UKBMS Polyommatus icarus
 ## 10020:   500   2017   148       198  59.65347  UKBMS Polyommatus icarus</code></pre>
 <p>Convert to log 10 collated indices (TRMOBS)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>co_index[, LOGDENSITY<span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">log</span>(COL_INDEX)<span class="op">/</span><span class="kw">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="op">:</span><span class="er">=</span><span class="st"> </span>LOGDENSITY <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(LOGDENSITY) <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, by =<span class="st"> </span>.(SPECIES, BOOTi)]</span>
-<span id="cb4-2"><a href="#cb4-2"></a>co_index</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>co_index[, LOGDENSITY<span class="sc">:</span><span class="er">=</span> <span class="fu">log</span>(COL_INDEX)<span class="sc">/</span><span class="fu">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="sc">:</span><span class="er">=</span> LOGDENSITY <span class="sc">-</span> <span class="fu">mean</span>(LOGDENSITY) <span class="sc">+</span> <span class="dv">2</span>, by <span class="ot">=</span> .(SPECIES, BOOTi)]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##        BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID            SPECIES
 ##     1:     0   2008   155       154 343.00258  UKBMS    Maniola jurtina
 ##     2:     0   2009   216       215 316.96054  UKBMS    Maniola jurtina
@@ -575,8 +551,10 @@ div.tocify {
 ## 10020:   1.775636 2.102809</code></pre>
 <p>Next we calculate and plot the indicator, where the confidence interval is based on the bootstraps</p>
 <p>First we generate the indicator for real data</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>msi &lt;-<span class="st"> </span><span class="kw">produce_indicator0</span>(co_index[BOOTi <span class="op">==</span><span class="st"> </span><span class="dv">0</span>])</span>
-<span id="cb6-2"><a href="#cb6-2"></a>msi</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>msi <span class="ot">&lt;-</span> <span class="fu">produce_indicator0</span>(co_index[BOOTi <span class="sc">==</span> <span class="dv">0</span>])</span></code></pre></div>
+<pre><code>## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>msi</span></code></pre></div>
 <pre><code>##    year indicator ind_gam0    SMOOTH NSPECIES
 ## 1  2008  93.06434 63.45042 100.00000        2
 ## 2  2009 128.66868 78.32167 123.43759        2
@@ -589,13 +567,1512 @@ div.tocify {
 ## 9  2016  89.99077 79.85997 125.86200        2
 ## 10 2017 157.60336 89.84621 141.60064        2</code></pre>
 <p>Then generate an indicator for each bootstrap</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>msi_boot &lt;-<span class="st"> </span><span class="kw">produce_indicators_boot</span>(co_index[BOOTi <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>])</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">str</span>(msi_boot)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>msi_boot <span class="ot">&lt;-</span> <span class="fu">produce_indicators_boot</span>(co_index[BOOTi <span class="sc">&gt;</span> <span class="dv">0</span>])</span></code></pre></div>
+<pre><code>## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used
+
+## Warning in if (class(temp_indicator_scaled) != &quot;try-error&quot;) {: the condition has
+## length &gt; 1 and only the first element will be used</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(msi_boot)</span></code></pre></div>
 <pre><code>##  num [1:10, 1:500] 59.9 73.6 75 60.9 61.7 ...
 ##  - attr(*, &quot;dimnames&quot;)=List of 2
 ##   ..$ : NULL
 ##   ..$ : chr [1:500] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>msi_boot[,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>msi_boot[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
 <pre><code>##              1        2        3        4        5
 ##  [1,] 59.94336 63.03045 65.00111 63.97033 66.23381
 ##  [2,] 73.55726 77.28879 79.18544 78.92274 83.27691
@@ -608,8 +2085,8 @@ div.tocify {
 ##  [9,] 79.69771 82.81265 82.23267 80.10832 80.82010
 ## [10,] 89.77988 90.08617 90.71027 89.64004 89.36373</code></pre>
 <p>Now we add a confidence interval to the indicator based on quantiles from the bootstrapped indicators</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>msi &lt;-<span class="st"> </span><span class="kw">add_indicator_CI</span>(msi, msi_boot)</span>
-<span id="cb12-2"><a href="#cb12-2"></a>msi</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>msi <span class="ot">&lt;-</span> <span class="fu">add_indicator_CI</span>(msi, msi_boot)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>msi</span></code></pre></div>
 <pre><code>##    year indicator ind_gam0    SMOOTH NSPECIES LOWsmooth1 UPPsmooth1
 ## 1  2008  93.06434 63.45042 100.00000        2   88.14009   111.0803
 ## 2  2009 128.66868 78.32167 123.43759        2  112.91961   134.9132
@@ -622,19 +2099,19 @@ div.tocify {
 ## 9  2016  89.99077 79.85997 125.86200        2  120.03092   131.7026
 ## 10 2017 157.60336 89.84621 141.60064        2  139.70652   143.4271</code></pre>
 <p>Plot the indicator</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">ggplot</span>(msi, <span class="kw">aes</span>(year, indicator))<span class="op">+</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">14</span>))<span class="op">+</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> LOWsmooth1, <span class="dt">ymax =</span> UPPsmooth1), <span class="dt">alpha=</span>.<span class="dv">2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> SMOOTH), <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="op">+</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">max</span>(<span class="dv">200</span>,<span class="kw">max</span>(msi<span class="op">$</span>UPPsmooth1))))<span class="op">+</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="kw">paste</span>(<span class="st">&quot;Example indicator for&quot;</span>, bms, <span class="st">&quot;based on two species&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(msi, <span class="fu">aes</span>(year, indicator))<span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>))<span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> LOWsmooth1, <span class="at">ymax =</span> UPPsmooth1), <span class="at">alpha=</span>.<span class="dv">2</span>, <span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> SMOOTH), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(<span class="dv">200</span>,<span class="fu">max</span>(msi<span class="sc">$</span>UPPsmooth1))))<span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">&quot;Example indicator for&quot;</span>, bms, <span class="st">&quot;based on two species&quot;</span>))</span></code></pre></div>
 <p><img src="multispecies_indicators_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Calculate the indicator trend including confidence interval from the bootstraps</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>msi_trend &lt;-<span class="st"> </span><span class="kw">estimate_ind_trends</span>(msi, msi_boot)</span>
-<span id="cb15-2"><a href="#cb15-2"></a>msi_trend</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>msi_trend <span class="ot">&lt;-</span> <span class="fu">estimate_ind_trends</span>(msi, msi_boot)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>msi_trend</span></code></pre></div>
 <pre><code>##   minyear maxyear nboot_lt  rate_lt rate_lt_low rate_lt_upp   pcn_lt pcn_lt_low
-## 1    2008    2017      500 1.018977    1.017446     1.04204 18.43512   16.84273
+## 1    2008    2017      500 1.029534    1.017446     1.04204 29.94672   16.84273
 ##   pcn_lt_upp     TrendClass_lt
 ## 1   44.86399 Moderate increase</code></pre>
 
@@ -649,7 +2126,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -667,7 +2144,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -682,6 +2159,9 @@ $(document).ready(function () {
 <script>
 $(document).ready(function ()  {
 
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
         .removeClass('toc-ignore')
@@ -693,7 +2173,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0

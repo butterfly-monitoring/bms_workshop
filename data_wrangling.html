@@ -15,21 +15,46 @@
 
 <title>Exploring the data.table package</title>
 
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="site_libs/elevate-section-attrs-2.0/elevate-section-attrs.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -125,39 +150,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -168,10 +163,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -188,40 +179,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -249,7 +213,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -261,7 +225,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -272,10 +236,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -287,7 +264,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -416,7 +392,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -507,11 +483,11 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
@@ -539,17 +515,18 @@ div.tocify {
 </ol>
 <hr />
 <p>You will need to load the following R packages and the data found in the bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip">downloaded here</a>. Once you have downloaded the data, unzip the folder and add the data in your R project directory, your current R working directory, or set your working directly accordingly <code>setwd()</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(data.table)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code></pre></div>
+<pre><code>## data.table 1.14.0 using 4 threads (see ?getDTthreads).  Latest news: r-datatable.com</code></pre>
 <p>All data are stored in <code>rds</code> format, this format is highly efficient for storing R object, but you could also have them in any other format. To load <code>.rds data</code>, we use the function <code>readRDS()</code></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>b_count_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>m_visit_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>m_site_sub &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">## to read csv into a data.table use fread()</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>bcz_class &lt;-<span class="st"> </span>data.table<span class="op">::</span><span class="kw">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
-<span id="cb2-8"><a href="#cb2-8"></a></span>
-<span id="cb2-9"><a href="#cb2-9"></a>b_count_sub</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>b_count_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>m_visit_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>m_site_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">## to read csv into a data.table use fread()</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>bcz_class <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>b_count_sub</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial visit_date year month day       species_name
 ##     1:  FRBMS            FRBMS.1 2009-05-22 2009     5  22    Maniola jurtina
 ##     2:  FRBMS            FRBMS.1 2009-08-01 2009     8   1    Maniola jurtina
@@ -584,8 +561,8 @@ div.tocify {
 </div>
 <div id="extract-columns" class="section level3">
 <h3>Extract columns</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>my_new_dt &lt;-<span class="st"> </span>b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
-<span id="cb4-2"><a href="#cb4-2"></a>my_new_dt</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_new_dt <span class="ot">&lt;-</span> b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>my_new_dt</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial year visit_date
 ##     1:  FRBMS            FRBMS.1 2009 2009-05-22
 ##     2:  FRBMS            FRBMS.1 2009 2009-08-01
@@ -601,9 +578,9 @@ div.tocify {
 </div>
 <div id="extract-unique" class="section level3">
 <h3>Extract unique</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">unique</span>(my_new_dt<span class="op">$</span>bms_id)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt<span class="sc">$</span>bms_id)</span></code></pre></div>
 <pre><code>## [1] &quot;FRBMS&quot; &quot;NLBMS&quot; &quot;UKBMS&quot;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
 <pre><code>##     bms_id year
 ##  1:  FRBMS 2009
 ##  2:  FRBMS 2010
@@ -642,7 +619,7 @@ div.tocify {
 </div>
 <div id="subset" class="section level3">
 <h3>Subset</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_new_dt[bms_id <span class="op">==</span><span class="st"> &quot;NLBMS&quot;</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>my_new_dt[bms_id <span class="sc">==</span> <span class="st">&quot;NLBMS&quot;</span>, ]</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial year visit_date
 ##     1:  NLBMS            NLBMS.1 2008 2008-05-23
 ##     2:  NLBMS            NLBMS.1 2008 2008-06-07
@@ -658,8 +635,8 @@ div.tocify {
 </div>
 <div id="work-with-date" class="section level3">
 <h3>Work with date</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>my_new_dt[ , month <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">month</span>(visit_date)][ , <span class="kw">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="op">:</span><span class="er">=</span><span class="st"> </span>.(<span class="kw">mday</span>(visit_date), <span class="kw">year</span>(visit_date))]</span>
-<span id="cb12-2"><a href="#cb12-2"></a>my_new_dt</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_new_dt[ , month <span class="sc">:</span><span class="er">=</span> <span class="fu">month</span>(visit_date)][ , <span class="fu">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="sc">:</span><span class="er">=</span> .(<span class="fu">mday</span>(visit_date), <span class="fu">year</span>(visit_date))]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>my_new_dt</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial year visit_date month day
 ##     1:  FRBMS            FRBMS.1 2009 2009-05-22     5  22
 ##     2:  FRBMS            FRBMS.1 2009 2009-08-01     8   1
@@ -675,7 +652,7 @@ div.tocify {
 </div>
 <div id="count-object" class="section level3">
 <h3>Count object</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_new_dt[ , .N, by =<span class="st"> </span>bms_id]</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_new_dt[ , .N, by <span class="ot">=</span> bms_id]</span></code></pre></div>
 <pre><code>##    bms_id     N
 ## 1:  FRBMS  1074
 ## 2:  NLBMS 26204
@@ -683,11 +660,11 @@ div.tocify {
 </div>
 <div id="rename-column" class="section level3">
 <h3>rename column</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">## change names</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="kw">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="kw">setnames</span>(b_count_sub, <span class="kw">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="kw">names</span>(b_count_sub) &lt;-<span class="st"> </span><span class="kw">toupper</span>(<span class="kw">names</span>(b_count_sub))</span>
-<span id="cb16-5"><a href="#cb16-5"></a>b_count_sub</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## change names</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="fu">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(b_count_sub) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(<span class="fu">names</span>(b_count_sub))</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>b_count_sub</span></code></pre></div>
 <pre><code>##        BMS_ID   SITE_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
 ##     1:  FRBMS   FRBMS.1 2009-05-22 2009     5  22    Maniola jurtina     5
 ##     2:  FRBMS   FRBMS.1 2009-08-01 2009     8   1    Maniola jurtina     5
@@ -703,13 +680,13 @@ div.tocify {
 </div>
 <div id="merge-data-sets" class="section level3">
 <h3>Merge data sets</h3>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co">## merge data set</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="kw">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
-<span id="cb18-3"><a href="#cb18-3"></a></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="kw">setkey</span>(b_count_sub, SITE_ID)</span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="kw">setkey</span>(m_site_sub, SITE_ID)</span>
-<span id="cb18-6"><a href="#cb18-6"></a></span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="kw">merge</span>(b_count_sub, m_site_sub[bms_id <span class="op">==</span><span class="st"> &quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## merge data set</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(b_count_sub, SITE_ID)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(m_site_sub, SITE_ID)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
 <pre><code>##       SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
 ##    1: FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
 ##    2: FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
@@ -734,7 +711,7 @@ div.tocify {
 ## 1072:          3737000          2835000
 ## 1073:          3737000          2835000
 ## 1074:          3737000          2835000</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">merge</span>(b_count_sub, m_site_sub[bms_id <span class="op">==</span><span class="st"> &quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>##         SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
 ##     1:  FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
 ##     2:  FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
@@ -759,8 +736,8 @@ div.tocify {
 ## 59600:               NA               NA
 ## 59601:               NA               NA
 ## 59602:               NA               NA</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>data_m &lt;-<span class="st"> </span><span class="kw">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="dt">all.x =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb22-2"><a href="#cb22-2"></a>data_m</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data_m <span class="ot">&lt;-</span> <span class="fu">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>data_m</span></code></pre></div>
 <pre><code>##         SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
 ##     1:  FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
 ##     2:  FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
@@ -799,7 +776,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -817,7 +794,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -832,6 +809,9 @@ $(document).ready(function () {
 <script>
 $(document).ready(function ()  {
 
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')
         .removeClass('toc-ignore')
@@ -843,7 +823,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
