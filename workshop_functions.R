@@ -99,11 +99,11 @@ trend_func <- function(collind_df, bycols = NULL, minyear = NULL, maxyear = NULL
                            minyear = minyear,
                            maxyear = maxyear,
                            n = length(minyear:maxyear),
-                           rate_lt = ifelse(class(lm_obj) != "try-error", 
+                           rate_lt = ifelse(!inherits(lm_obj, "try-error"), 
                                             exp(coef(lm_obj)[2]*2.303), NA),
-                           pc1_lt = ifelse(class(lm_obj) != "try-error",
+                           pc1_lt = ifelse(!inherits(lm_obj, "try-error"),
                                            100*(exp(coef(lm_obj)[2]*2.303)-1), NA),
-                           pcn_lt = ifelse(class(lm_obj) != "try-error", 
+                           pcn_lt = ifelse(!inherits(lm_obj, "try-error"), 
                                            100*(exp(coef(lm_obj)[2]*2.303)^(
                                              maxyear-minyear)-1), NA))
     
@@ -112,11 +112,11 @@ trend_func <- function(collind_df, bycols = NULL, minyear = NULL, maxyear = NULL
       collind_df10 <- collind_df[M_YEAR >= (maxyear-9)]
       lm_obj10 <- try(lm(TRMOBS ~ M_YEAR, collind_df10), silent = TRUE)
       
-      trend_df$rate_10y <- ifelse(class(lm_obj10) != "try-error", 
+      trend_df$rate_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                                   exp(coef(lm_obj10)[2]*2.303), NA)
-      trend_df$pc1_10y <- ifelse(class(lm_obj10) != "try-error", 
+      trend_df$pc1_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                                  100*(exp(coef(lm_obj10)[2]*2.303)-1), NA)
-      trend_df$pcn_10y <- ifelse(class(lm_obj10) != "try-error", 
+      trend_df$pcn_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                                  100*(exp(coef(lm_obj10)[2]*2.303)^(
                                    9)-1), NA)
     }
@@ -352,7 +352,7 @@ indicator_func <- function(Data, index = 100, max = 10000, min = 1){
   }
   temp_indicator_scaled <- try(apply(X = indicator_scaled[, -ncol(indicator_scaled)], 
                                      MARGIN = 2, FUN = fillTailNAs), silent=TRUE)
-  if(class(temp_indicator_scaled) != "try-error"){
+  if(!inherits(temp_indicator_scaled, "try-error")){
     indicator_scaled <- cbind(temp_indicator_scaled, apply(X = temp_indicator_scaled, 
                                                            MARGIN = 1, FUN = geomean))
     colnames(indicator_scaled)[ncol(indicator_scaled)] <- "indicator"
@@ -378,11 +378,11 @@ estimate_ind_trends <- function(msi0, msi_boot){
   lm_obj <- try(lm(log(SMOOTH) ~ year, msi0), silent = TRUE)
   
   
-  msi_trend <- data.frame(rate_lt = ifelse(class(lm_obj) != "try-error", 
+  msi_trend <- data.frame(rate_lt = ifelse(!inherits(lm_obj, "try-error"), 
                                            exp(coef(lm_obj)[2]), NA),
-                          pc1_lt = ifelse(class(lm_obj) != "try-error",
+                          pc1_lt = ifelse(!inherits(lm_obj, "try-error"),
                                           100*(exp(coef(lm_obj)[2])-1), NA),
-                          pcn_lt = ifelse(class(lm_obj) != "try-error", 
+                          pcn_lt = ifelse(!inherits(lm_obj, "try-error"), 
                                           100*(exp(coef(lm_obj)[2])^(
                                             maxyear-minyear)-1), NA))
   
@@ -390,11 +390,11 @@ estimate_ind_trends <- function(msi0, msi_boot){
   if(length(minyear:maxyear) > 10){
     lm_obj10 <- try(lm(log(SMOOTH) ~ year, msi0_10), silent = TRUE)
     
-    msi_trend$rate_10y <- ifelse(class(lm_obj10) != "try-error", 
+    msi_trend$rate_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                       exp(coef(lm_obj10)[2]), NA)
-    msi_trend$pc1_10y <- ifelse(class(lm_obj10) != "try-error", 
+    msi_trend$pc1_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                      100*(exp(coef(lm_obj10)[2])-1), NA)
-    msi_trend$pcn_10y <- ifelse(class(lm_obj10) != "try-error", 
+    msi_trend$pcn_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                      100*(exp(coef(lm_obj10)[2])^(
                        9)-1), NA)
     
@@ -450,11 +450,11 @@ indicator_trend_func <- function(msi_boot1, msi0){
   lm_obj <- try(lm(log(msi_boot1) ~ msi0$year), silent = TRUE)
   
   
-  trend_df <- data.frame(rate_lt = ifelse(class(lm_obj) != "try-error", 
+  trend_df <- data.frame(rate_lt = ifelse(!inherits(lm_obj, "try-error"), 
                                           exp(coef(lm_obj)[2]), NA),
-                         pc1_lt = ifelse(class(lm_obj) != "try-error",
+                         pc1_lt = ifelse(!inherits(lm_obj, "try-error"),
                                          100*(exp(coef(lm_obj)[2])-1), NA),
-                         pcn_lt = ifelse(class(lm_obj) != "try-error", 
+                         pcn_lt = ifelse(!inherits(lm_obj, "try-error"), 
                                          100*(exp(coef(lm_obj)[2])^(
                                            maxyear-minyear)-1), NA))
   
@@ -463,11 +463,11 @@ indicator_trend_func <- function(msi_boot1, msi0){
     msi_boot10 <- tail(msi_boot1,10)
     lm_obj10 <- try(lm(log(msi_boot10) ~ tail(msi0$year,10)), silent = TRUE)
     
-    trend_df$rate_10y <- ifelse(class(lm_obj10) != "try-error", 
+    trend_df$rate_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                      exp(coef(lm_obj10)[2]), NA)
-    trend_df$pc1_10y <- ifelse(class(lm_obj10) != "try-error", 
+    trend_df$pc1_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                     100*(exp(coef(lm_obj10)[2])-1), NA)
-    trend_df$ pcn_10y <- ifelse(class(lm_obj10) != "try-error", 
+    trend_df$ pcn_10y <- ifelse(!inherits(lm_obj10, "try-error"), 
                     100*(exp(coef(lm_obj10)[2])^(
                       9)-1), NA)
   }
