@@ -533,7 +533,7 @@ href="workshop_functions.R"><strong>this link</strong></a>.</p>
 ## 10019:   500   2016   139       158  26.61983  UKBMS Polyommatus icarus
 ## 10020:   500   2017   148       198  59.65347  UKBMS Polyommatus icarus</code></pre>
 <p>Convert to log 10 collated indices (TRMOBS)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>co_index[, LOGDENSITY<span class="sc">:=</span> <span class="fu">log</span>(COL_INDEX)<span class="sc">/</span><span class="fu">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="sc">:=</span> LOGDENSITY <span class="sc">-</span> <span class="fu">mean</span>(LOGDENSITY) <span class="sc">+</span> <span class="dv">2</span>, by <span class="ot">=</span> .(SPECIES, BOOTi)]</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>co_index[COL_INDEX <span class="sc">&gt;</span> <span class="dv">0</span>, LOGDENSITY<span class="sc">:=</span> <span class="fu">log</span>(COL_INDEX)<span class="sc">/</span><span class="fu">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="sc">:=</span> LOGDENSITY <span class="sc">-</span> <span class="fu">mean</span>(LOGDENSITY) <span class="sc">+</span> <span class="dv">2</span>, by <span class="ot">=</span> .(SPECIES, BOOTi)]</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##        BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID            SPECIES
 ##     1:     0   2008   155       154 343.00258  UKBMS    Maniola jurtina
