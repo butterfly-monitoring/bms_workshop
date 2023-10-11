@@ -171,8 +171,9 @@ boot_ests[, TRMOBSCIUPP := quantile(TRMOBSCI, 0.975), by = M_YEAR]
 ylim_ <- c(min(floor(range(boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, TRMOBSCI]))),
            max(ceiling(range(boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, TRMOBSCI]))))
 
-plot_col <- ggplot(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, ], aes(x = M_YEAR, y = TRMOBSCI)) + geom_point(colour = "orange", alpha = 0.2) + ylim(ylim_) +
-    geom_line(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, median(TRMOBSCI, na.rm=TRUE), by = M_YEAR], aes(x = M_YEAR, y = V1), size = 1, colour = "dodgerblue4") +
+plot_col <- ggplot(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, ], aes(x = M_YEAR, y = TRMOBSCI)) + 
+    geom_point(colour = "orange", alpha = 0.2) + ylim(ylim_) +
+    geom_line(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, median(TRMOBSCI, na.rm=TRUE), by = M_YEAR], aes(x = M_YEAR, y = V1), linewidth = 1, colour = "dodgerblue4") +
     geom_hline(yintercept = 2, linetype = "dashed", color = "grey50") +
     scale_x_continuous(minor_breaks = waiver(), limits = c(2005, 2020), breaks = seq(2005, 2020, by = 5)) + 
     xlab("Year") + ylab("Abundance Incices (Log/Log(10))") +
