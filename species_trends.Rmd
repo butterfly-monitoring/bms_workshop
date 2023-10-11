@@ -47,11 +47,13 @@ sp_trend
 Plot the species log collated index with bootstrapped 95% confidence interval and linear trend line (in red)
 ```{r}
 # Calculate mean log index for original data
-co_index0_mean <- mean(co_index[BOOTi == 0]$LOGDENSITY)
+co_index0_mean <- mean(co_index[BOOTi == 0]$LOGDENSITY, na.rm = TRUE)
 # Derive interval from quantiles
 co_index_ci <- merge(co_index[BOOTi == 0, .(M_YEAR, TRMOBS, BMS_ID)],
-                        co_index[BOOTi != 0, .(LOWER = quantile(LOGDENSITY - co_index0_mean + 2, 0.025),
-                          UPPER = quantile(LOGDENSITY - co_index0_mean + 2, 0.975)), by = .(BMS_ID, M_YEAR)],
+                        co_index[BOOTi != 0, .(
+                          LOWER = quantile(LOGDENSITY - co_index0_mean + 2, 0.025, na.rm = TRUE),
+                          UPPER = quantile(LOGDENSITY - co_index0_mean + 2, 0.975, na.rm = TRUE)), 
+                          by = .(BMS_ID, M_YEAR)],
                         by=c("BMS_ID","M_YEAR"))
 
 
