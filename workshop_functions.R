@@ -83,8 +83,8 @@ boot_trend_func <- function(iboot){
 # Underlying function for (linear) trend calculation
 trend_func <- function(collind_df, bycols = NULL, minyear = NULL, maxyear = NULL){
   setDT(collind_df)
-  if(is.null(minyear)) minyear <- min(collind_df$M_YEAR)
-  if(is.null(maxyear)) maxyear <- max(collind_df$M_YEAR)
+  if (is.null(minyear)) minyear <- collind_df[!is.na(TRMOBS), min(M_YEAR)]
+  if (is.null(maxyear)) maxyear <- collind_df[!is.na(TRMOBS), max(M_YEAR)]
   if(!is.null(minyear)) collind_df <- collind_df[M_YEAR >= minyear]
   if(!is.null(maxyear)) collind_df <- collind_df[M_YEAR <= maxyear]
   
@@ -93,8 +93,8 @@ trend_func <- function(collind_df, bycols = NULL, minyear = NULL, maxyear = NULL
     lm_obj <- try(lm(TRMOBS ~ M_YEAR, collind_df), silent = TRUE)
     
     trend_df <- data.frame(BOOTi = collind_df$BOOTi[1],
-                           data_from = min(collind_df$M_YEAR),
-                           data_to = max(collind_df$M_YEAR),
+                           data_from = collind_df[!is.na(TRMOBS), min(M_YEAR)],
+                           data_to = collind_df[!is.na(TRMOBS), max(M_YEAR)],
                            data_nyears = length(collind_df$M_YEAR),
                            minyear = minyear,
                            maxyear = maxyear,
