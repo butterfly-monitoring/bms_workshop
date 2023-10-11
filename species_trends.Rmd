@@ -32,7 +32,8 @@ co_index
 
 Convert to log 10 collated indices (TRMOBS) 
 ```{r}
-co_index[, LOGDENSITY:= log(COL_INDEX)/log(10)][, TRMOBS := LOGDENSITY - mean(LOGDENSITY) + 2, by = .(BOOTi)]
+## Only use COL_INDEX larger then 0 for calculation or logdensity and trmobs
+co_index[COL_INDEX > 0, LOGDENSITY:= log(COL_INDEX)/log(10)][, TRMOBS := LOGDENSITY - mean(LOGDENSITY) + 2, by = .(BOOTi)]
 co_index
 ```
 
