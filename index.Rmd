@@ -74,7 +74,7 @@ devtools::install_github("RetoSchmucki/rbms")
 
 ### Update
 Since 2020, the scripts have been updated to replace the raster package and ensure that everything is working with the latest version of R. The package `terra` is now used instead of `raster`. 
-This integrates the contribution send by <a href="https://github.com/RetoSchmucki/rbms/issues/23#issue-2140271598" target="gtp732".
+This integrates the contribution send by <a href="https://github.com/RetoSchmucki/rbms/issues/23#issue-2140271598" target="gtp732" </a>.
 
 ### Reading
 
