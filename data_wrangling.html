@@ -535,19 +535,20 @@ here</a>. Once you have downloaded the data, unzip the folder and add
 the data in your R project directory, your current R working directory,
 or set your working directly accordingly <code>setwd()</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code></pre></div>
+<pre><code>## data.table 1.15.4 using 6 threads (see ?getDTthreads).  Latest news: r-datatable.com</code></pre>
 <p>All data are stored in <code>rds</code> format, this format is highly
 efficient for storing R object, but you could also have them in any
 other format. To load <code>.rds data</code>, we use the function
 <code>readRDS()</code></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>b_count_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>m_visit_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>m_site_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">## to read csv into a data.table use fread()</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>bcz_class <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>b_count_sub</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>b_count_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>m_visit_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>m_site_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="do">## to read csv into a data.table use fread()</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>bcz_class <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>b_count_sub</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial visit_date  year month   day
 ##        &lt;char&gt;             &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
 ##     1:  FRBMS            FRBMS.1 2009-05-22  2009     5    22
@@ -592,8 +593,8 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="extract-columns" class="section level3">
 <h3>Extract columns</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>my_new_dt <span class="ot">&lt;-</span> b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>my_new_dt <span class="ot">&lt;-</span> b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial  year visit_date
 ##        &lt;char&gt;             &lt;char&gt; &lt;num&gt;     &lt;Date&gt;
 ##     1:  FRBMS            FRBMS.1  2009 2009-05-22
@@ -610,9 +611,9 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="extract-unique" class="section level3">
 <h3>Extract unique</h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt<span class="sc">$</span>bms_id)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt<span class="sc">$</span>bms_id)</span></code></pre></div>
 <pre><code>## [1] &quot;FRBMS&quot; &quot;NLBMS&quot; &quot;UKBMS&quot;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
 <pre><code>##     bms_id  year
 ##     &lt;char&gt; &lt;num&gt;
 ##  1:  FRBMS  2009
@@ -652,7 +653,7 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="subset" class="section level3">
 <h3>Subset</h3>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>my_new_dt[bms_id <span class="sc">==</span> <span class="st">&quot;NLBMS&quot;</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>my_new_dt[bms_id <span class="sc">==</span> <span class="st">&quot;NLBMS&quot;</span>, ]</span></code></pre></div>
 <pre><code>##        bms_id transect_id_serial  year visit_date
 ##        &lt;char&gt;             &lt;char&gt; &lt;num&gt;     &lt;Date&gt;
 ##     1:  NLBMS            NLBMS.1  2008 2008-05-23
@@ -669,8 +670,8 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="work-with-date" class="section level3">
 <h3>Work with date</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>my_new_dt[ , month <span class="sc">:=</span> <span class="fu">month</span>(visit_date)][ , <span class="fu">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="sc">:=</span> .(<span class="fu">mday</span>(visit_date), <span class="fu">year</span>(visit_date))]</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>my_new_dt[ , month <span class="sc">:=</span> <span class="fu">month</span>(visit_date)][ , <span class="fu">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="sc">:=</span> .(<span class="fu">mday</span>(visit_date), <span class="fu">year</span>(visit_date))]</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
 <pre><code>## Index: &lt;bms_id&gt;
 ##        bms_id transect_id_serial  year visit_date month   day
 ##        &lt;char&gt;             &lt;char&gt; &lt;int&gt;     &lt;Date&gt; &lt;int&gt; &lt;int&gt;
@@ -688,7 +689,7 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="count-object" class="section level3">
 <h3>Count object</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>my_new_dt[ , .N, by <span class="ot">=</span> bms_id]</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>my_new_dt[ , .N, by <span class="ot">=</span> bms_id]</span></code></pre></div>
 <pre><code>##    bms_id     N
 ##    &lt;char&gt; &lt;int&gt;
 ## 1:  FRBMS  1074
@@ -697,11 +698,11 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="rename-column" class="section level3">
 <h3>rename column</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="do">## change names</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="fu">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">names</span>(b_count_sub) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(<span class="fu">names</span>(b_count_sub))</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>b_count_sub</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="do">## change names</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="fu">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">names</span>(b_count_sub) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(<span class="fu">names</span>(b_count_sub))</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>b_count_sub</span></code></pre></div>
 <pre><code>##        BMS_ID   SITE_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
 ##        &lt;char&gt;    &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
 ##     1:  FRBMS   FRBMS.1 2009-05-22  2009     5    22    Maniola jurtina     5
@@ -718,13 +719,13 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="merge-data-sets" class="section level3">
 <h3>Merge data sets</h3>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="do">## merge data set</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">setkey</span>(b_count_sub, SITE_ID)</span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">setkey</span>(m_site_sub, SITE_ID)</span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="do">## merge data set</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="fu">setkey</span>(b_count_sub, SITE_ID)</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">setkey</span>(m_site_sub, SITE_ID)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
 <pre><code>## Key: &lt;SITE_ID&gt;
 ##       SITE_ID BMS_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
 ##        &lt;char&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
@@ -752,7 +753,7 @@ new_col := mean(col1), by = col3])</li>
 ## 1072:          3737000          2835000
 ## 1073:          3737000          2835000
 ## 1074:          3737000          2835000</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## Key: &lt;SITE_ID&gt;
 ##         SITE_ID BMS_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
 ##          &lt;char&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
@@ -780,8 +781,8 @@ new_col := mean(col1), by = col3])</li>
 ## 59600:               NA               NA
 ## 59601:               NA               NA
 ## 59602:               NA               NA</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>data_m <span class="ot">&lt;-</span> <span class="fu">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>data_m</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>data_m <span class="ot">&lt;-</span> <span class="fu">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>data_m</span></code></pre></div>
 <pre><code>## Key: &lt;SITE_ID&gt;
 ##         SITE_ID BMS_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
 ##          &lt;char&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
