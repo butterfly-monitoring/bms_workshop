@@ -15,7 +15,7 @@
 
 <title>Calculating species trends</title>
 
-<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -57,6 +57,7 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -525,6 +526,7 @@ href="workshop_functions.R"><strong>this link</strong></a>.</p>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>co_index <span class="ot">&lt;-</span> co_index[BMS_ID <span class="sc">==</span> bms]</span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##       BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID         SPECIES
+##       &lt;num&gt;  &lt;num&gt; &lt;int&gt;     &lt;int&gt;     &lt;num&gt; &lt;char&gt;          &lt;char&gt;
 ##    1:     0   2008   155       154  343.0026  UKBMS Maniola jurtina
 ##    2:     0   2009   216       215  316.9605  UKBMS Maniola jurtina
 ##    3:     0   2010   231       228  232.6817  UKBMS Maniola jurtina
@@ -541,6 +543,7 @@ href="workshop_functions.R"><strong>this link</strong></a>.</p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>co_index[COL_INDEX <span class="sc">&gt;</span> <span class="dv">0</span>, LOGDENSITY<span class="sc">:=</span> <span class="fu">log</span>(COL_INDEX)<span class="sc">/</span><span class="fu">log</span>(<span class="dv">10</span>)][, TRMOBS <span class="sc">:=</span> LOGDENSITY <span class="sc">-</span> <span class="fu">mean</span>(LOGDENSITY) <span class="sc">+</span> <span class="dv">2</span>, by <span class="ot">=</span> .(BOOTi)]</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>co_index</span></code></pre></div>
 <pre><code>##       BOOTi M_YEAR NSITE NSITE_OBS COL_INDEX BMS_ID         SPECIES LOGDENSITY
+##       &lt;num&gt;  &lt;num&gt; &lt;int&gt;     &lt;int&gt;     &lt;num&gt; &lt;char&gt;          &lt;char&gt;      &lt;num&gt;
 ##    1:     0   2008   155       154  343.0026  UKBMS Maniola jurtina   2.535297
 ##    2:     0   2009   216       215  316.9605  UKBMS Maniola jurtina   2.501005
 ##    3:     0   2010   231       228  232.6817  UKBMS Maniola jurtina   2.366762
@@ -553,6 +556,7 @@ href="workshop_functions.R"><strong>this link</strong></a>.</p>
 ## 5009:   500   2016   161       261  308.2660  UKBMS Maniola jurtina   2.488926
 ## 5010:   500   2017   148       233  471.5391  UKBMS Maniola jurtina   2.673518
 ##         TRMOBS
+##          &lt;num&gt;
 ##    1: 2.013024
 ##    2: 1.978731
 ##    3: 1.844488

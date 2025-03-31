@@ -15,7 +15,7 @@
 
 <title>Exploring the data.table package</title>
 
-<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -57,6 +57,7 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -534,44 +535,45 @@ here</a>. Once you have downloaded the data, unzip the folder and add
 the data in your R project directory, your current R working directory,
 or set your working directly accordingly <code>setwd()</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code></pre></div>
-<pre><code>## data.table 1.14.8 using 4 threads (see ?getDTthreads).  Latest news: r-datatable.com</code></pre>
 <p>All data are stored in <code>rds</code> format, this format is highly
 efficient for storing R object, but you could also have them in any
 other format. To load <code>.rds data</code>, we use the function
 <code>readRDS()</code></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>b_count_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>m_visit_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>m_site_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="do">## to read csv into a data.table use fread()</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>bcz_class <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>b_count_sub</span></code></pre></div>
-<pre><code>##        bms_id transect_id_serial visit_date year month day       species_name
-##     1:  FRBMS            FRBMS.1 2009-05-22 2009     5  22    Maniola jurtina
-##     2:  FRBMS            FRBMS.1 2009-08-01 2009     8   1    Maniola jurtina
-##     3:  FRBMS            FRBMS.1 2009-08-01 2009     8   1 Polyommatus icarus
-##     4:  FRBMS            FRBMS.1 2009-09-19 2009     9  19 Polyommatus icarus
-##     5:  FRBMS            FRBMS.1 2010-07-02 2010     7   2    Maniola jurtina
-##    ---                                                                       
-## 59598:  UKBMS          UKBMS.300 2018-07-03 2018     7   3    Maniola jurtina
-## 59599:  UKBMS          UKBMS.300 2018-07-10 2018     7  10    Maniola jurtina
-## 59600:  UKBMS          UKBMS.300 2018-07-16 2018     7  16    Maniola jurtina
-## 59601:  UKBMS          UKBMS.300 2018-07-16 2018     7  16 Polyommatus icarus
-## 59602:  UKBMS          UKBMS.300 2018-07-23 2018     7  23    Maniola jurtina
-##        count
-##     1:     5
-##     2:     5
-##     3:     2
-##     4:     6
-##     5:    20
-##    ---      
-## 59598:    26
-## 59599:    16
-## 59600:     5
-## 59601:     1
-## 59602:     2</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>b_count_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_count.rds&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>m_visit_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_visit.rds&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>m_site_sub <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;bms_workshop_data/work_site.rds&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="do">## to read csv into a data.table use fread()</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>bcz_class <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">&quot;bms_workshop_data/GEnS_v3_classification.csv&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>b_count_sub</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial visit_date  year month   day
+##        &lt;char&gt;             &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;
+##     1:  FRBMS            FRBMS.1 2009-05-22  2009     5    22
+##     2:  FRBMS            FRBMS.1 2009-08-01  2009     8     1
+##     3:  FRBMS            FRBMS.1 2009-08-01  2009     8     1
+##     4:  FRBMS            FRBMS.1 2009-09-19  2009     9    19
+##     5:  FRBMS            FRBMS.1 2010-07-02  2010     7     2
+##    ---                                                       
+## 59598:  UKBMS          UKBMS.300 2018-07-03  2018     7     3
+## 59599:  UKBMS          UKBMS.300 2018-07-10  2018     7    10
+## 59600:  UKBMS          UKBMS.300 2018-07-16  2018     7    16
+## 59601:  UKBMS          UKBMS.300 2018-07-16  2018     7    16
+## 59602:  UKBMS          UKBMS.300 2018-07-23  2018     7    23
+##              species_name count
+##                    &lt;char&gt; &lt;num&gt;
+##     1:    Maniola jurtina     5
+##     2:    Maniola jurtina     5
+##     3: Polyommatus icarus     2
+##     4: Polyommatus icarus     6
+##     5:    Maniola jurtina    20
+##    ---                         
+## 59598:    Maniola jurtina    26
+## 59599:    Maniola jurtina    16
+## 59600:    Maniola jurtina     5
+## 59601: Polyommatus icarus     1
+## 59602:    Maniola jurtina     2</code></pre>
 <p>When you look at a data.table object, you can will see the first and
 last five row, with all column names.</p>
 <ol style="list-style-type: decimal">
@@ -590,145 +592,155 @@ new_col := mean(col1), by = col3])</li>
 </div>
 <div id="extract-columns" class="section level3">
 <h3>Extract columns</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>my_new_dt <span class="ot">&lt;-</span> b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
-<pre><code>##        bms_id transect_id_serial year visit_date
-##     1:  FRBMS            FRBMS.1 2009 2009-05-22
-##     2:  FRBMS            FRBMS.1 2009 2009-08-01
-##     3:  FRBMS            FRBMS.1 2009 2009-08-01
-##     4:  FRBMS            FRBMS.1 2009 2009-09-19
-##     5:  FRBMS            FRBMS.1 2010 2010-07-02
-##    ---                                          
-## 59598:  UKBMS          UKBMS.300 2018 2018-07-03
-## 59599:  UKBMS          UKBMS.300 2018 2018-07-10
-## 59600:  UKBMS          UKBMS.300 2018 2018-07-16
-## 59601:  UKBMS          UKBMS.300 2018 2018-07-16
-## 59602:  UKBMS          UKBMS.300 2018 2018-07-23</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>my_new_dt <span class="ot">&lt;-</span> b_count_sub[ , .(bms_id, transect_id_serial, year, visit_date)]</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial  year visit_date
+##        &lt;char&gt;             &lt;char&gt; &lt;num&gt;     &lt;Date&gt;
+##     1:  FRBMS            FRBMS.1  2009 2009-05-22
+##     2:  FRBMS            FRBMS.1  2009 2009-08-01
+##     3:  FRBMS            FRBMS.1  2009 2009-08-01
+##     4:  FRBMS            FRBMS.1  2009 2009-09-19
+##     5:  FRBMS            FRBMS.1  2010 2010-07-02
+##    ---                                           
+## 59598:  UKBMS          UKBMS.300  2018 2018-07-03
+## 59599:  UKBMS          UKBMS.300  2018 2018-07-10
+## 59600:  UKBMS          UKBMS.300  2018 2018-07-16
+## 59601:  UKBMS          UKBMS.300  2018 2018-07-16
+## 59602:  UKBMS          UKBMS.300  2018 2018-07-23</code></pre>
 </div>
 <div id="extract-unique" class="section level3">
 <h3>Extract unique</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt<span class="sc">$</span>bms_id)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt<span class="sc">$</span>bms_id)</span></code></pre></div>
 <pre><code>## [1] &quot;FRBMS&quot; &quot;NLBMS&quot; &quot;UKBMS&quot;</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
-<pre><code>##     bms_id year
-##  1:  FRBMS 2009
-##  2:  FRBMS 2010
-##  3:  FRBMS 2011
-##  4:  FRBMS 2012
-##  5:  FRBMS 2013
-##  6:  FRBMS 2014
-##  7:  FRBMS 2015
-##  8:  FRBMS 2017
-##  9:  FRBMS 2018
-## 10:  FRBMS 2016
-## 11:  FRBMS 2008
-## 12:  NLBMS 2008
-## 13:  NLBMS 2009
-## 14:  NLBMS 2010
-## 15:  NLBMS 2011
-## 16:  NLBMS 2012
-## 17:  NLBMS 2013
-## 18:  NLBMS 2014
-## 19:  NLBMS 2015
-## 20:  NLBMS 2016
-## 21:  NLBMS 2017
-## 22:  NLBMS 2018
-## 23:  UKBMS 2008
-## 24:  UKBMS 2009
-## 25:  UKBMS 2010
-## 26:  UKBMS 2011
-## 27:  UKBMS 2012
-## 28:  UKBMS 2013
-## 29:  UKBMS 2014
-## 30:  UKBMS 2015
-## 31:  UKBMS 2016
-## 32:  UKBMS 2017
-## 33:  UKBMS 2018
-##     bms_id year</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">unique</span>(my_new_dt[, .(bms_id, year)])</span></code></pre></div>
+<pre><code>##     bms_id  year
+##     &lt;char&gt; &lt;num&gt;
+##  1:  FRBMS  2009
+##  2:  FRBMS  2010
+##  3:  FRBMS  2011
+##  4:  FRBMS  2012
+##  5:  FRBMS  2013
+##  6:  FRBMS  2014
+##  7:  FRBMS  2015
+##  8:  FRBMS  2017
+##  9:  FRBMS  2018
+## 10:  FRBMS  2016
+## 11:  FRBMS  2008
+## 12:  NLBMS  2008
+## 13:  NLBMS  2009
+## 14:  NLBMS  2010
+## 15:  NLBMS  2011
+## 16:  NLBMS  2012
+## 17:  NLBMS  2013
+## 18:  NLBMS  2014
+## 19:  NLBMS  2015
+## 20:  NLBMS  2016
+## 21:  NLBMS  2017
+## 22:  NLBMS  2018
+## 23:  UKBMS  2008
+## 24:  UKBMS  2009
+## 25:  UKBMS  2010
+## 26:  UKBMS  2011
+## 27:  UKBMS  2012
+## 28:  UKBMS  2013
+## 29:  UKBMS  2014
+## 30:  UKBMS  2015
+## 31:  UKBMS  2016
+## 32:  UKBMS  2017
+## 33:  UKBMS  2018
+##     bms_id  year</code></pre>
 </div>
 <div id="subset" class="section level3">
 <h3>Subset</h3>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>my_new_dt[bms_id <span class="sc">==</span> <span class="st">&quot;NLBMS&quot;</span>, ]</span></code></pre></div>
-<pre><code>##        bms_id transect_id_serial year visit_date
-##     1:  NLBMS            NLBMS.1 2008 2008-05-23
-##     2:  NLBMS            NLBMS.1 2008 2008-06-07
-##     3:  NLBMS            NLBMS.1 2008 2008-07-26
-##     4:  NLBMS            NLBMS.1 2008 2008-07-26
-##     5:  NLBMS            NLBMS.1 2008 2008-08-15
-##    ---                                          
-## 26200:  NLBMS          NLBMS.300 2016 2016-07-03
-## 26201:  NLBMS          NLBMS.300 2016 2016-07-25
-## 26202:  NLBMS          NLBMS.300 2017 2017-06-26
-## 26203:  NLBMS          NLBMS.300 2017 2017-07-14
-## 26204:  NLBMS          NLBMS.300 2018 2018-06-15</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>my_new_dt[bms_id <span class="sc">==</span> <span class="st">&quot;NLBMS&quot;</span>, ]</span></code></pre></div>
+<pre><code>##        bms_id transect_id_serial  year visit_date
+##        &lt;char&gt;             &lt;char&gt; &lt;num&gt;     &lt;Date&gt;
+##     1:  NLBMS            NLBMS.1  2008 2008-05-23
+##     2:  NLBMS            NLBMS.1  2008 2008-06-07
+##     3:  NLBMS            NLBMS.1  2008 2008-07-26
+##     4:  NLBMS            NLBMS.1  2008 2008-07-26
+##     5:  NLBMS            NLBMS.1  2008 2008-08-15
+##    ---                                           
+## 26200:  NLBMS          NLBMS.300  2016 2016-07-03
+## 26201:  NLBMS          NLBMS.300  2016 2016-07-25
+## 26202:  NLBMS          NLBMS.300  2017 2017-06-26
+## 26203:  NLBMS          NLBMS.300  2017 2017-07-14
+## 26204:  NLBMS          NLBMS.300  2018 2018-06-15</code></pre>
 </div>
 <div id="work-with-date" class="section level3">
 <h3>Work with date</h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>my_new_dt[ , month <span class="sc">:=</span> <span class="fu">month</span>(visit_date)][ , <span class="fu">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="sc">:=</span> .(<span class="fu">mday</span>(visit_date), <span class="fu">year</span>(visit_date))]</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
-<pre><code>##        bms_id transect_id_serial year visit_date month day
-##     1:  FRBMS            FRBMS.1 2009 2009-05-22     5  22
-##     2:  FRBMS            FRBMS.1 2009 2009-08-01     8   1
-##     3:  FRBMS            FRBMS.1 2009 2009-08-01     8   1
-##     4:  FRBMS            FRBMS.1 2009 2009-09-19     9  19
-##     5:  FRBMS            FRBMS.1 2010 2010-07-02     7   2
-##    ---                                                    
-## 59598:  UKBMS          UKBMS.300 2018 2018-07-03     7   3
-## 59599:  UKBMS          UKBMS.300 2018 2018-07-10     7  10
-## 59600:  UKBMS          UKBMS.300 2018 2018-07-16     7  16
-## 59601:  UKBMS          UKBMS.300 2018 2018-07-16     7  16
-## 59602:  UKBMS          UKBMS.300 2018 2018-07-23     7  23</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>my_new_dt[ , month <span class="sc">:=</span> <span class="fu">month</span>(visit_date)][ , <span class="fu">c</span>(<span class="st">&quot;day&quot;</span>, <span class="st">&quot;year&quot;</span>) <span class="sc">:=</span> .(<span class="fu">mday</span>(visit_date), <span class="fu">year</span>(visit_date))]</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>my_new_dt</span></code></pre></div>
+<pre><code>## Index: &lt;bms_id&gt;
+##        bms_id transect_id_serial  year visit_date month   day
+##        &lt;char&gt;             &lt;char&gt; &lt;int&gt;     &lt;Date&gt; &lt;int&gt; &lt;int&gt;
+##     1:  FRBMS            FRBMS.1  2009 2009-05-22     5    22
+##     2:  FRBMS            FRBMS.1  2009 2009-08-01     8     1
+##     3:  FRBMS            FRBMS.1  2009 2009-08-01     8     1
+##     4:  FRBMS            FRBMS.1  2009 2009-09-19     9    19
+##     5:  FRBMS            FRBMS.1  2010 2010-07-02     7     2
+##    ---                                                       
+## 59598:  UKBMS          UKBMS.300  2018 2018-07-03     7     3
+## 59599:  UKBMS          UKBMS.300  2018 2018-07-10     7    10
+## 59600:  UKBMS          UKBMS.300  2018 2018-07-16     7    16
+## 59601:  UKBMS          UKBMS.300  2018 2018-07-16     7    16
+## 59602:  UKBMS          UKBMS.300  2018 2018-07-23     7    23</code></pre>
 </div>
 <div id="count-object" class="section level3">
 <h3>Count object</h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>my_new_dt[ , .N, by <span class="ot">=</span> bms_id]</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>my_new_dt[ , .N, by <span class="ot">=</span> bms_id]</span></code></pre></div>
 <pre><code>##    bms_id     N
+##    &lt;char&gt; &lt;int&gt;
 ## 1:  FRBMS  1074
 ## 2:  NLBMS 26204
 ## 3:  UKBMS 32324</code></pre>
 </div>
 <div id="rename-column" class="section level3">
 <h3>rename column</h3>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="do">## change names</span></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="fu">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">names</span>(b_count_sub) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(<span class="fu">names</span>(b_count_sub))</span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>b_count_sub</span></code></pre></div>
-<pre><code>##        BMS_ID   SITE_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
-##     1:  FRBMS   FRBMS.1 2009-05-22 2009     5  22    Maniola jurtina     5
-##     2:  FRBMS   FRBMS.1 2009-08-01 2009     8   1    Maniola jurtina     5
-##     3:  FRBMS   FRBMS.1 2009-08-01 2009     8   1 Polyommatus icarus     2
-##     4:  FRBMS   FRBMS.1 2009-09-19 2009     9  19 Polyommatus icarus     6
-##     5:  FRBMS   FRBMS.1 2010-07-02 2010     7   2    Maniola jurtina    20
-##    ---                                                                    
-## 59598:  UKBMS UKBMS.300 2018-07-03 2018     7   3    Maniola jurtina    26
-## 59599:  UKBMS UKBMS.300 2018-07-10 2018     7  10    Maniola jurtina    16
-## 59600:  UKBMS UKBMS.300 2018-07-16 2018     7  16    Maniola jurtina     5
-## 59601:  UKBMS UKBMS.300 2018-07-16 2018     7  16 Polyommatus icarus     1
-## 59602:  UKBMS UKBMS.300 2018-07-23 2018     7  23    Maniola jurtina     2</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="do">## change names</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">setnames</span>(b_count_sub, <span class="fu">c</span>(<span class="st">&quot;species_name&quot;</span>, <span class="st">&quot;bms_id&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;SPECIES&quot;</span>, <span class="st">&quot;BMS_ID&quot;</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">names</span>(b_count_sub) <span class="ot">&lt;-</span> <span class="fu">toupper</span>(<span class="fu">names</span>(b_count_sub))</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>b_count_sub</span></code></pre></div>
+<pre><code>##        BMS_ID   SITE_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
+##        &lt;char&gt;    &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
+##     1:  FRBMS   FRBMS.1 2009-05-22  2009     5    22    Maniola jurtina     5
+##     2:  FRBMS   FRBMS.1 2009-08-01  2009     8     1    Maniola jurtina     5
+##     3:  FRBMS   FRBMS.1 2009-08-01  2009     8     1 Polyommatus icarus     2
+##     4:  FRBMS   FRBMS.1 2009-09-19  2009     9    19 Polyommatus icarus     6
+##     5:  FRBMS   FRBMS.1 2010-07-02  2010     7     2    Maniola jurtina    20
+##    ---                                                                       
+## 59598:  UKBMS UKBMS.300 2018-07-03  2018     7     3    Maniola jurtina    26
+## 59599:  UKBMS UKBMS.300 2018-07-10  2018     7    10    Maniola jurtina    16
+## 59600:  UKBMS UKBMS.300 2018-07-16  2018     7    16    Maniola jurtina     5
+## 59601:  UKBMS UKBMS.300 2018-07-16  2018     7    16 Polyommatus icarus     1
+## 59602:  UKBMS UKBMS.300 2018-07-23  2018     7    23    Maniola jurtina     2</code></pre>
 </div>
 <div id="merge-data-sets" class="section level3">
 <h3>Merge data sets</h3>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="do">## merge data set</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="fu">setkey</span>(b_count_sub, SITE_ID)</span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">setkey</span>(m_site_sub, SITE_ID)</span>
-<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
-<pre><code>##       SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
-##    1: FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
-##    2: FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
-##    3: FRBMS.1  FRBMS 2009-08-01 2009     8   1 Polyommatus icarus     2
-##    4: FRBMS.1  FRBMS 2009-09-19 2009     9  19 Polyommatus icarus     6
-##    5: FRBMS.1  FRBMS 2010-07-02 2010     7   2    Maniola jurtina    20
-##   ---                                                                  
-## 1070: FRBMS.9  FRBMS 2014-07-18 2014     7  18    Maniola jurtina    30
-## 1071: FRBMS.9  FRBMS 2014-08-21 2014     8  21    Maniola jurtina    33
-## 1072: FRBMS.9  FRBMS 2014-08-21 2014     8  21 Polyommatus icarus     6
-## 1073: FRBMS.9  FRBMS 2014-09-16 2014     9  16    Maniola jurtina     2
-## 1074: FRBMS.9  FRBMS 2014-09-16 2014     9  16 Polyommatus icarus    18
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="do">## merge data set</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">setnames</span>(m_site_sub, <span class="st">&quot;transect_id_serial&quot;</span>, <span class="st">&quot;SITE_ID&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">setkey</span>(b_count_sub, SITE_ID)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">setkey</span>(m_site_sub, SITE_ID)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)])</span></code></pre></div>
+<pre><code>## Key: &lt;SITE_ID&gt;
+##       SITE_ID BMS_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
+##        &lt;char&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
+##    1: FRBMS.1  FRBMS 2009-05-22  2009     5    22    Maniola jurtina     5
+##    2: FRBMS.1  FRBMS 2009-08-01  2009     8     1    Maniola jurtina     5
+##    3: FRBMS.1  FRBMS 2009-08-01  2009     8     1 Polyommatus icarus     2
+##    4: FRBMS.1  FRBMS 2009-09-19  2009     9    19 Polyommatus icarus     6
+##    5: FRBMS.1  FRBMS 2010-07-02  2010     7     2    Maniola jurtina    20
+##   ---                                                                     
+## 1070: FRBMS.9  FRBMS 2014-07-18  2014     7    18    Maniola jurtina    30
+## 1071: FRBMS.9  FRBMS 2014-08-21  2014     8    21    Maniola jurtina    33
+## 1072: FRBMS.9  FRBMS 2014-08-21  2014     8    21 Polyommatus icarus     6
+## 1073: FRBMS.9  FRBMS 2014-09-16  2014     9    16    Maniola jurtina     2
+## 1074: FRBMS.9  FRBMS 2014-09-16  2014     9    16 Polyommatus icarus    18
 ##       transect_lon_1km transect_lat_1km
+##                  &lt;num&gt;            &lt;num&gt;
 ##    1:          3953000          2967000
 ##    2:          3953000          2967000
 ##    3:          3953000          2967000
@@ -740,20 +752,23 @@ new_col := mean(col1), by = col3])</li>
 ## 1072:          3737000          2835000
 ## 1073:          3737000          2835000
 ## 1074:          3737000          2835000</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre><code>##         SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
-##     1:  FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
-##     2:  FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
-##     3:  FRBMS.1  FRBMS 2009-08-01 2009     8   1 Polyommatus icarus     2
-##     4:  FRBMS.1  FRBMS 2009-09-19 2009     9  19 Polyommatus icarus     6
-##     5:  FRBMS.1  FRBMS 2010-07-02 2010     7   2    Maniola jurtina    20
-##    ---                                                                   
-## 59598: UKBMS.99  UKBMS 2018-08-28 2018     8  28 Polyommatus icarus     8
-## 59599: UKBMS.99  UKBMS 2018-09-02 2018     9   2    Maniola jurtina    25
-## 59600: UKBMS.99  UKBMS 2018-09-02 2018     9   2 Polyommatus icarus     7
-## 59601: UKBMS.99  UKBMS 2018-10-01 2018    10   1    Maniola jurtina    14
-## 59602: UKBMS.99  UKBMS 2018-10-01 2018    10   1 Polyommatus icarus     2
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">merge</span>(b_count_sub, m_site_sub[bms_id <span class="sc">==</span> <span class="st">&quot;FRBMS&quot;</span> , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Key: &lt;SITE_ID&gt;
+##         SITE_ID BMS_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
+##          &lt;char&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
+##     1:  FRBMS.1  FRBMS 2009-05-22  2009     5    22    Maniola jurtina     5
+##     2:  FRBMS.1  FRBMS 2009-08-01  2009     8     1    Maniola jurtina     5
+##     3:  FRBMS.1  FRBMS 2009-08-01  2009     8     1 Polyommatus icarus     2
+##     4:  FRBMS.1  FRBMS 2009-09-19  2009     9    19 Polyommatus icarus     6
+##     5:  FRBMS.1  FRBMS 2010-07-02  2010     7     2    Maniola jurtina    20
+##    ---                                                                      
+## 59598: UKBMS.99  UKBMS 2018-08-28  2018     8    28 Polyommatus icarus     8
+## 59599: UKBMS.99  UKBMS 2018-09-02  2018     9     2    Maniola jurtina    25
+## 59600: UKBMS.99  UKBMS 2018-09-02  2018     9     2 Polyommatus icarus     7
+## 59601: UKBMS.99  UKBMS 2018-10-01  2018    10     1    Maniola jurtina    14
+## 59602: UKBMS.99  UKBMS 2018-10-01  2018    10     1 Polyommatus icarus     2
 ##        transect_lon_1km transect_lat_1km
+##                   &lt;num&gt;            &lt;num&gt;
 ##     1:          3953000          2967000
 ##     2:          3953000          2967000
 ##     3:          3953000          2967000
@@ -765,21 +780,24 @@ new_col := mean(col1), by = col3])</li>
 ## 59600:               NA               NA
 ## 59601:               NA               NA
 ## 59602:               NA               NA</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>data_m <span class="ot">&lt;-</span> <span class="fu">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>data_m</span></code></pre></div>
-<pre><code>##         SITE_ID BMS_ID VISIT_DATE YEAR MONTH DAY            SPECIES COUNT
-##     1:  FRBMS.1  FRBMS 2009-05-22 2009     5  22    Maniola jurtina     5
-##     2:  FRBMS.1  FRBMS 2009-08-01 2009     8   1    Maniola jurtina     5
-##     3:  FRBMS.1  FRBMS 2009-08-01 2009     8   1 Polyommatus icarus     2
-##     4:  FRBMS.1  FRBMS 2009-09-19 2009     9  19 Polyommatus icarus     6
-##     5:  FRBMS.1  FRBMS 2010-07-02 2010     7   2    Maniola jurtina    20
-##    ---                                                                   
-## 59598: UKBMS.99  UKBMS 2018-08-28 2018     8  28 Polyommatus icarus     8
-## 59599: UKBMS.99  UKBMS 2018-09-02 2018     9   2    Maniola jurtina    25
-## 59600: UKBMS.99  UKBMS 2018-09-02 2018     9   2 Polyommatus icarus     7
-## 59601: UKBMS.99  UKBMS 2018-10-01 2018    10   1    Maniola jurtina    14
-## 59602: UKBMS.99  UKBMS 2018-10-01 2018    10   1 Polyommatus icarus     2
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>data_m <span class="ot">&lt;-</span> <span class="fu">merge</span>(b_count_sub, m_site_sub[ , .(SITE_ID, transect_lon_1km, transect_lat_1km)], <span class="at">all.x =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>data_m</span></code></pre></div>
+<pre><code>## Key: &lt;SITE_ID&gt;
+##         SITE_ID BMS_ID VISIT_DATE  YEAR MONTH   DAY            SPECIES COUNT
+##          &lt;char&gt; &lt;char&gt;     &lt;Date&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;             &lt;char&gt; &lt;num&gt;
+##     1:  FRBMS.1  FRBMS 2009-05-22  2009     5    22    Maniola jurtina     5
+##     2:  FRBMS.1  FRBMS 2009-08-01  2009     8     1    Maniola jurtina     5
+##     3:  FRBMS.1  FRBMS 2009-08-01  2009     8     1 Polyommatus icarus     2
+##     4:  FRBMS.1  FRBMS 2009-09-19  2009     9    19 Polyommatus icarus     6
+##     5:  FRBMS.1  FRBMS 2010-07-02  2010     7     2    Maniola jurtina    20
+##    ---                                                                      
+## 59598: UKBMS.99  UKBMS 2018-08-28  2018     8    28 Polyommatus icarus     8
+## 59599: UKBMS.99  UKBMS 2018-09-02  2018     9     2    Maniola jurtina    25
+## 59600: UKBMS.99  UKBMS 2018-09-02  2018     9     2 Polyommatus icarus     7
+## 59601: UKBMS.99  UKBMS 2018-10-01  2018    10     1    Maniola jurtina    14
+## 59602: UKBMS.99  UKBMS 2018-10-01  2018    10     1 Polyommatus icarus     2
 ##        transect_lon_1km transect_lat_1km
+##                   &lt;num&gt;            &lt;num&gt;
 ##     1:          3953000          2967000
 ##     2:          3953000          2967000
 ##     3:          3953000          2967000

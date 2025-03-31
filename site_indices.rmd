@@ -76,7 +76,9 @@ pheno <- ts_flight_curve$pheno
 
 ### Impute & Site index
 
-With the phenology and teh observed counts, you can now impute values for missing week counts and adequately compute sites abundance index over the entire monitoring season.
+With the phenology and the observed counts, you can now calculate the values for missing weekly counts and appropriately calculate the abundance index for the entire monitoring season.
+
+Note that until now (31/03/2025) the function "impute_count()" calculates the count with an arithmetic approach and not with the Generalised Linear Model with offset proposed in Schmucki et al. 2016. This was implemented for reasons of efficiency. However, the GLM with offset appears to be more robust in some cases, so this method will be reintegrated into this function in the future. 
 
 ``` {r impute}
 impt_counts <- rbms::impute_count(ts_season_count = ts_season_count, 
@@ -111,6 +113,8 @@ co_index$col_index
 ### Bootstrap CI
 
 With this sample of site indices, we can compute the collated indices for multiple combination of sites. Using a bootstrap approach, we can now estimate the confidence interval around the estimated collated index, using the variation observed between monitoring sites. First we randomly draw *n* bootstrap samples, using the function `boot_sample`. This function sample with replacement from a the pool of all sites available. Because sampling is done with replacement, site can occur twice in a specific bootstrap sample and it will be treated as two independent sites (realisations). Here we use a 500 bootstrap, with set.seed() sake of cpu time and repeatability, but you should aim for 1000 sample and more and remove the set.seed() in the random number generator to generate different samples between runs.
+
+Note that we set "glm_weights = TRUE" in the "collated_index()" function. If you set this argument to "TRUE", the function will use the portion of the flight curve sampled as the weight in the model. This means that poorly informed indices (site with few visits or with visits outside the flight curve) have less influence on the collated index than those that cover a larger proportion of the flight curve. 
 
 ``` {r bootstrap_sample, eval = FALSE}
 bms_id <- "NLBMS"
@@ -148,7 +152,7 @@ saveRDS(co_index_boot, file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp
 
 Now that you have a collated index, and a series bootstrapped collated indices, you can compute a 95% Confidence Interval around your index and construct a figure to illustrate the temporal trend resulting from the annual indices. Here we will rescale and present the indices on a log(index)/log(10) scale. Confidence interval are computed using the 0.025 and 0.975 quantile from the *n* bootstrap sample.  
 
-``` {r collated_index_figure}
+``` {r collated_index_figure1}
 bms_id <- "NLBMS"
 
 co_index_boot <- readRDS(file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
@@ -177,6 +181,81 @@ plot_col <- ggplot(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBS
     geom_hline(yintercept = 2, linetype = "dashed", color = "grey50") +
     scale_x_continuous(minor_breaks = waiver(), limits = c(2005, 2020), breaks = seq(2005, 2020, by = 5)) + 
     xlab("Year") + ylab("Abundance Incices (Log/Log(10))") +
+    labs(subtitle = paste(s_sp, bms_id, sep = " "))
+
+plot_col
+
+```
+
+Now, let's center the index on the first year instead (line #5 > "boot0[, first_year_log0 := boot0[order(M_YEAR), LOGDENSITY0][1]]").
+
+``` {r collated_index_figure2}
+bms_id <- "NLBMS"
+
+co_index_boot <- readRDS(file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
+
+boot0 <- co_index_boot[ , mean(COL_INDEX, na.rm=TRUE), by = M_YEAR]
+boot0[, LOGDENSITY0 := log(V1) / log(10)]
+boot0[, first_year_log0 := boot0[order(M_YEAR), LOGDENSITY0][1]]
+
+# Add mean of BOOTi == 0 (real data) to all data
+boot_ests <- merge(co_index_boot, boot0[, .(M_YEAR, first_year_log0)],
+    by = c("M_YEAR")
+    )
+
+boot_ests[, LOGDENSITY := log(COL_INDEX) / log(10)]
+boot_ests[, TRMOBSCI := LOGDENSITY - first_year_log0 + 2]
+
+boot_ests[, TRMOBSCILOW := quantile(TRMOBSCI, 0.025), by = M_YEAR]
+boot_ests[, TRMOBSCIUPP := quantile(TRMOBSCI, 0.975), by = M_YEAR]
+
+ylim_ <- c(min(floor(range(boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, TRMOBSCI]))),
+           max(ceiling(range(boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, TRMOBSCI]))))
+
+plot_col <- ggplot(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, ], aes(x = M_YEAR, y = TRMOBSCI)) + 
+    geom_point(colour = "orange", alpha = 0.2) + ylim(ylim_) +
+    geom_line(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, median(TRMOBSCI, na.rm=TRUE), by = M_YEAR], aes(x = M_YEAR, y = V1), linewidth = 1, colour = "dodgerblue4") +
+    geom_hline(yintercept = 2, linetype = "dashed", color = "grey50") +
+    scale_x_continuous(minor_breaks = waiver(), limits = c(2005, 2020), breaks = seq(2005, 2020, by = 5)) + 
+    xlab("Year") + ylab("Abundance Incices (Log/Log(10))") +
+    labs(subtitle = paste(s_sp, bms_id, sep = " "))
+
+plot_col
+
+```
+
+
+Now, let's center the index on the first year and scale it to 100 instead of 2, using 10^2 = 100 (line #10 > "boot_ests[, TRMOBSCI := 10^(LOGDENSITY - first_year_log0 + 2)]"). Note that we have also changed the intercept to 100 in the figure. This may be easier to interpret as we start at 100 and have an increase or decrease relative to this baseline.
+
+``` {r collated_index_figure3}
+bms_id <- "NLBMS"
+
+co_index_boot <- readRDS(file.path("bms_workshop_data", paste( gsub(" ", "_", s_sp), bms_id, "co_index_boot.rds", sep="_")))
+
+boot0 <- co_index_boot[ , mean(COL_INDEX, na.rm=TRUE), by = M_YEAR]
+boot0[, LOGDENSITY0 := log(V1) / log(10)]
+boot0[, first_year_log0 := boot0[order(M_YEAR), LOGDENSITY0][1]]
+
+# Add mean of BOOTi == 0 (real data) to all data
+boot_ests <- merge(co_index_boot, boot0[, .(M_YEAR, first_year_log0)],
+    by = c("M_YEAR")
+    )
+
+boot_ests[, LOGDENSITY := log(COL_INDEX) / log(10)]
+boot_ests[, TRMOBSCI := 10^(LOGDENSITY - first_year_log0 + 2)]
+
+boot_ests[, TRMOBSCILOW := quantile(TRMOBSCI, 0.025), by = M_YEAR]
+boot_ests[, TRMOBSCIUPP := quantile(TRMOBSCI, 0.975), by = M_YEAR]
+
+ylim_ <- c(min(floor(range(boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, TRMOBSCI]))),
+           max(ceiling(range(boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, TRMOBSCI]))))
+
+plot_col <- ggplot(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, ], aes(x = M_YEAR, y = TRMOBSCI)) + 
+    geom_point(colour = "orange", alpha = 0.2) + ylim(ylim_) +
+    geom_line(data = boot_ests[TRMOBSCI <= TRMOBSCIUPP & TRMOBSCI >= TRMOBSCILOW, median(TRMOBSCI, na.rm=TRUE), by = M_YEAR], aes(x = M_YEAR, y = V1), linewidth = 1, colour = "dodgerblue4") +
+    geom_hline(yintercept = 100, linetype = "dashed", color = "grey50") +
+    scale_x_continuous(minor_breaks = waiver(), limits = c(2005, 2020), breaks = seq(2005, 2020, by = 5)) + 
+    xlab("Year") + ylab("Abundance Incices (first year set to 100)") +
     labs(subtitle = paste(s_sp, bms_id, sep = " "))
 
 plot_col

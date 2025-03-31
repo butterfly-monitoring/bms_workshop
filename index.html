@@ -14,7 +14,7 @@
 
 <title>Calculating butterfly trends, indexes and indicators</title>
 
-<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -55,6 +55,7 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -513,73 +514,73 @@ monitoring.</p>
 <col width="15%" />
 </colgroup>
 <thead>
-<tr class="header">
+<tr>
 <th>Time</th>
 <th>Topic</th>
 <th>Instructor</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>9:30 - 9:40</td>
 <td>login to virtual workshop (Zoom meeting)</td>
 <td>David</td>
 </tr>
-<tr class="even">
+<tr>
 <td>9:40 - 10:00</td>
 <td>Introduction and participant presentation</td>
 <td>Chris</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>10:00 - 11:00</td>
 <td><a href="data_wrangling.html">BMS and count data in R, data
 wrangling and mapping</a></td>
 <td>Reto</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Break</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>11:15 - 12:15</td>
 <td><a href="flight_curve_presentation.html">Modelling Butterfly
 Abundance (GAI)</a></td>
 <td>Emily</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Lunch</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>13:30 - 14:30</td>
 <td><a href="flight_curve_computing.html">Flight curve</a> and <a
 href="site_indices.html">Site &amp; collated indices</a></td>
 <td>Reto</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Break</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>14:45 - 15:45</td>
 <td><a href="species_trends.html">Trends</a> and <a
 href="multispecies_indicators.html">Multi-Species Indices</a></td>
 <td>Emily</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Break</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Q&amp;A (30 min)</td>
 <td></td>
 <td>Reto, Emily, David &amp; Chris</td>
 </tr>
-<tr class="even">
+<tr>
 <td></td>
 <td></td>
 <td></td>
@@ -613,10 +614,10 @@ RStudio</a></li>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;reshape2&quot;</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;plyr&quot;</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;sf&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;raster&quot;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;rasterVis&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmap&quot;</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;DT&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;terra&quot;</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmap&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;DT&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;mapview&quot;</span>)</span>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="do">## rbms from GitHub</span></span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;RetoSchmucki/rbms&quot;</span>)</span></code></pre></div>
 <p><br></p>
@@ -626,6 +627,17 @@ RStudio</a></li>
 <p><a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip"><b>WORKSHOP
 DATA</b></a></p>
 <p><br></p>
+</div>
+<div id="update" class="section level3">
+<h3>Update</h3>
+<p>Since 2020, the scripts have been updated to replace the raster
+package and ensure that everything is working with the latest version of
+R. The package <code>terra</code> is now used instead of
+<code>raster</code>. This integrates the contribution send by &lt;a
+href=“<a
+href="https://github.com/RetoSchmucki/rbms/issues/23#issue-2140271598"
+class="uri">https://github.com/RetoSchmucki/rbms/issues/23#issue-2140271598</a>”
+target=“gtp732”.</p>
 </div>
 <div id="reading" class="section level3">
 <h3>Reading</h3>

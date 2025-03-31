@@ -17,7 +17,7 @@ The bms_workshop_data folder that can be <a href="https://filedn.com/l4iF16owVCH
 
 For this section, you will need to install and load the `rbms` package available on GitHub with some explanation and documentation available <a href="https://retoschmucki.github.io/rbms/">here</a>
 
-```
+```{R install_rbms}
 if(!requireNamespace("devtools")) install.packages("devtools")
 devtools::install_github("RetoSchmucki/rbms")
 ```
@@ -40,12 +40,13 @@ m_visit_sub <- readRDS("bms_workshop_data/work_visit.rds")
 
 ### Exploring data
 
-Let's first explore the data and what is in these two tables
+Let's first explore the data and what is in these two tables. Here we use the library DT to create an interactive table.
 
 ``` {r data_explore}
 library(DT)
-datatable(b_count_sub[1:50, ], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
-datatable(m_visit_sub[1:50, ], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+DT::datatable(b_count_sub[1:50, ], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+DT::datatable(m_visit_sub[1:50, ], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+# explore in your console
 unique(b_count_sub[ , .(bms_id, species_name)])
 unique(b_count_sub[order(year), year])
 ```
@@ -71,6 +72,7 @@ data(m_count)
 2. Arrange data set name to fit the functions requirements
 
 ``` {r arrange_col_names}
+## change names in the data.table object
 setnames(m_visit_sub, c("transect_id_serial", "visit_date"), c("SITE_ID", "DATE"))
 names(m_visit_sub) <- toupper(names(m_visit_sub))
 
@@ -118,7 +120,7 @@ ts_season <- rbms::ts_monit_season(ts_date,
 
 ``` {r align_visit_ts_season}
 MY_visit_region <- m_visit_sub[BMS_ID %in% region_bms, ]
-ts_season_visit <- rbms::ts_monit_site(MY_visit_region, ts_season)
+ts_season_visit <- rbms::ts_monit_site(ts_season, MY_visit_region)
 ```
 
 6. Align the butterfly counts recorded for the species and region of interest with your visit and monitoring season
@@ -167,7 +169,8 @@ saveRDS(ts_flight_curve, file.path("bms_workshop_data", paste(gsub(" ", "_", s_s
 ``` {r flight_curve_plot_1}
 ts_flight_curve <- readRDS(file.path("bms_workshop_data", paste(gsub(" ", "_", s_sp), paste(region_bms, collapse="_"), "pheno.rds", sep = "_")))
 
-datatable(ts_flight_curve$pheno[1:370, .(SPECIES, M_YEAR, MONTH, trimWEEKNO, WEEK_SINCE, ANCHOR, NM)], rownames = FALSE, filter = "top", options = list(pageLength = 5, scrollX = T))
+## explore the phenology
+datatable(ts_flight_curve$pheno[1:370, .(SPECIES, M_YEAR, MONTH, trimWEEKNO, WEEK_SINCE, ANCHOR, NM)], rownames = FALSE, filter = "top", options = list(pageLength = 50, scrollX = T))
 ```
 
 > `rbms` does not contain a plot method, so you have to make your own with your favourite tool. 

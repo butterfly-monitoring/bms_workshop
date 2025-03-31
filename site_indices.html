@@ -15,7 +15,7 @@
 
 <title>Computing site and collated indices</title>
 
-<script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -57,6 +57,7 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -579,9 +580,15 @@ package</p>
 </div>
 <div id="impute-site-index" class="section level3">
 <h3>Impute &amp; Site index</h3>
-<p>With the phenology and teh observed counts, you can now impute values
-for missing week counts and adequately compute sites abundance index
-over the entire monitoring season.</p>
+<p>With the phenology and the observed counts, you can now calculate the
+values for missing weekly counts and appropriately calculate the
+abundance index for the entire monitoring season.</p>
+<p>Note that until now (31/03/2025) the function “impute_count()”
+calculates the count with an arithmetic approach and not with the
+Generalised Linear Model with offset proposed in Schmucki et al. 2016.
+This was implemented for reasons of efficiency. However, the GLM with
+offset appears to be more robust in some cases, so this method will be
+reintegrated into this function in the future.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>impt_counts <span class="ot">&lt;-</span> rbms<span class="sc">::</span><span class="fu">impute_count</span>(<span class="at">ts_season_count =</span> ts_season_count, </span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                  <span class="at">ts_flight_curve =</span> pheno, </span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                                  <span class="at">YearLimit =</span> <span class="cn">NULL</span>, </span>
@@ -604,35 +611,39 @@ site monitored in that region over the 10-year period.</p>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>sindex <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(<span class="st">&quot;bms_workshop_data&quot;</span>, <span class="fu">paste</span>( <span class="fu">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, s_sp), <span class="fu">paste</span>(region_bms, <span class="at">collapse=</span><span class="st">&quot;_&quot;</span>), <span class="st">&quot;sindex.rds&quot;</span>, <span class="at">sep=</span><span class="st">&quot;_&quot;</span>)))</span>
 <span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>sindex[<span class="fu">substr</span>(SITE_ID, <span class="dv">1</span>, <span class="dv">5</span>) <span class="sc">==</span> bms_id, ]</span></code></pre></div>
-<pre><code>##                  SPECIES   SITE_ID M_YEAR TOTAL_NM    SINDEX
-##    1: Polyommatus icarus   NLBMS.1   2008  0.38968 87.251078
-##    2: Polyommatus icarus  NLBMS.10   2008  0.70761  0.000000
-##    3: Polyommatus icarus NLBMS.100   2008  0.39172 12.764219
-##    4: Polyommatus icarus  NLBMS.11   2008  0.70421 12.780279
-##    5: Polyommatus icarus  NLBMS.12   2008  0.76831  1.301558
+<pre><code>## Key: &lt;M_YEAR, SITE_ID&gt;
+##                  SPECIES   SITE_ID M_YEAR TOTAL_NM    SINDEX
+##                   &lt;char&gt;    &lt;char&gt;  &lt;int&gt;    &lt;num&gt;     &lt;num&gt;
+##    1: Polyommatus icarus   NLBMS.1   2008  0.38452 88.421929
+##    2: Polyommatus icarus  NLBMS.10   2008  0.71276  0.000000
+##    3: Polyommatus icarus NLBMS.100   2008  0.41002 12.194527
+##    4: Polyommatus icarus  NLBMS.11   2008  0.70476 12.770305
+##    5: Polyommatus icarus  NLBMS.12   2008  0.77742  1.286306
 ##   ---                                                       
-## 2496: Polyommatus icarus  NLBMS.94   2017  0.38629  7.766186
-## 2497: Polyommatus icarus  NLBMS.95   2017  0.35916  0.000000
-## 2498: Polyommatus icarus  NLBMS.96   2017  0.68859  0.000000
-## 2499: Polyommatus icarus  NLBMS.97   2017  0.70718 21.211007
-## 2500: Polyommatus icarus  NLBMS.98   2017  0.52548  7.612088</code></pre>
+## 2514: Polyommatus icarus  NLBMS.94   2017  0.37326  8.037293
+## 2515: Polyommatus icarus  NLBMS.95   2017  0.44745  0.000000
+## 2516: Polyommatus icarus  NLBMS.96   2017  0.68085  0.000000
+## 2517: Polyommatus icarus  NLBMS.97   2017  0.74649 20.094040
+## 2518: Polyommatus icarus  NLBMS.98   2017  0.50655  7.896555</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>co_index <span class="ot">&lt;-</span> <span class="fu">collated_index</span>(<span class="at">data =</span> sindex[<span class="fu">substr</span>(SITE_ID, <span class="dv">1</span>, <span class="dv">5</span>) <span class="sc">==</span> bms_id, ], </span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                           <span class="at">s_sp =</span> s_sp,</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                           <span class="at">sindex_value =</span> <span class="st">&quot;SINDEX&quot;</span>,</span>
 <span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                           <span class="at">glm_weights =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                           <span class="at">rm_zero =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>co_index<span class="sc">$</span>col_index</span></code></pre></div>
-<pre><code>##     BOOTi M_YEAR NSITE NSITE_B NSITE_OBS COL_INDEX
-##  1:     0   2008   203     203       137  23.33228
-##  2:     0   2009   222     222       187  73.34732
-##  3:     0   2010   236     236       191  53.97436
-##  4:     0   2011   262     262       193  25.88315
-##  5:     0   2012   272     272       188  24.61936
-##  6:     0   2013   283     283       233  68.24259
-##  7:     0   2014   277     277       224  46.84152
-##  8:     0   2015   269     269       216  33.83268
-##  9:     0   2016   255     255       191  26.45301
-## 10:     0   2017   221     221       167  40.75606</code></pre>
+<pre><code>## Key: &lt;M_YEAR&gt;
+##     BOOTi M_YEAR NSITE NSITE_B NSITE_OBS COL_INDEX
+##     &lt;num&gt;  &lt;num&gt; &lt;int&gt;   &lt;int&gt;     &lt;int&gt;     &lt;num&gt;
+##  1:     0   2008   203     203       137  23.25839
+##  2:     0   2009   224     224       187  70.44026
+##  3:     0   2010   236     236       191  51.13282
+##  4:     0   2011   261     261       194  26.24425
+##  5:     0   2012   277     277       189  23.85835
+##  6:     0   2013   283     283       233  68.84266
+##  7:     0   2014   277     277       224  46.76059
+##  8:     0   2015   275     275       220  34.31891
+##  9:     0   2016   257     257       192  26.03402
+## 10:     0   2017   225     225       171  39.29854</code></pre>
 </div>
 <div id="bootstrap-ci" class="section level3">
 <h3>Bootstrap CI</h3>
@@ -648,6 +659,12 @@ will be treated as two independent sites (realisations). Here we use a
 500 bootstrap, with set.seed() sake of cpu time and repeatability, but
 you should aim for 1000 sample and more and remove the set.seed() in the
 random number generator to generate different samples between runs.</p>
+<p>Note that we set “glm_weights = TRUE” in the “collated_index()”
+function. If you set this argument to “TRUE”, the function will use the
+portion of the flight curve sampled as the weight in the model. This
+means that poorly informed indices (site with few visits or with visits
+outside the flight curve) have less influence on the collated index than
+those that cover a larger proportion of the flight curve.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>bms_id <span class="ot">&lt;-</span> <span class="st">&quot;NLBMS&quot;</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">125361</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
@@ -717,7 +734,79 @@ a log(index)/log(10) scale. Confidence interval are computed using the
 <span id="cb11-29"><a href="#cb11-29" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="fu">paste</span>(s_sp, bms_id, <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span>
 <span id="cb11-30"><a href="#cb11-30" tabindex="-1"></a></span>
 <span id="cb11-31"><a href="#cb11-31" tabindex="-1"></a>plot_col</span></code></pre></div>
-<p><img src="site_indices_files/figure-html/collated_index_figure-1.png" width="672" /></p>
+<p><img src="site_indices_files/figure-html/collated_index_figure1-1.png" width="672" /></p>
+<p>Now, let’s center the index on the first year instead (line #5 &gt;
+“boot0[, first_year_log0 := boot0[order(M_YEAR), LOGDENSITY0][1]]”).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>bms_id <span class="ot">&lt;-</span> <span class="st">&quot;NLBMS&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>co_index_boot <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(<span class="st">&quot;bms_workshop_data&quot;</span>, <span class="fu">paste</span>( <span class="fu">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, s_sp), bms_id, <span class="st">&quot;co_index_boot.rds&quot;</span>, <span class="at">sep=</span><span class="st">&quot;_&quot;</span>)))</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>boot0 <span class="ot">&lt;-</span> co_index_boot[ , <span class="fu">mean</span>(COL_INDEX, <span class="at">na.rm=</span><span class="cn">TRUE</span>), by <span class="ot">=</span> M_YEAR]</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>boot0[, LOGDENSITY0 <span class="sc">:=</span> <span class="fu">log</span>(V1) <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">10</span>)]</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>boot0[, first_year_log0 <span class="sc">:=</span> boot0[<span class="fu">order</span>(M_YEAR), LOGDENSITY0][<span class="dv">1</span>]]</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co"># Add mean of BOOTi == 0 (real data) to all data</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>boot_ests <span class="ot">&lt;-</span> <span class="fu">merge</span>(co_index_boot, boot0[, .(M_YEAR, first_year_log0)],</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;M_YEAR&quot;</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>    )</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>boot_ests[, LOGDENSITY <span class="sc">:=</span> <span class="fu">log</span>(COL_INDEX) <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">10</span>)]</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>boot_ests[, TRMOBSCI <span class="sc">:=</span> LOGDENSITY <span class="sc">-</span> first_year_log0 <span class="sc">+</span> <span class="dv">2</span>]</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>boot_ests[, TRMOBSCILOW <span class="sc">:=</span> <span class="fu">quantile</span>(TRMOBSCI, <span class="fl">0.025</span>), by <span class="ot">=</span> M_YEAR]</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>boot_ests[, TRMOBSCIUPP <span class="sc">:=</span> <span class="fu">quantile</span>(TRMOBSCI, <span class="fl">0.975</span>), by <span class="ot">=</span> M_YEAR]</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>ylim_ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">floor</span>(<span class="fu">range</span>(boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, TRMOBSCI]))),</span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>           <span class="fu">max</span>(<span class="fu">ceiling</span>(<span class="fu">range</span>(boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, TRMOBSCI]))))</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>plot_col <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, ], <span class="fu">aes</span>(<span class="at">x =</span> M_YEAR, <span class="at">y =</span> TRMOBSCI)) <span class="sc">+</span> </span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">ylim</span>(ylim_) <span class="sc">+</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">data =</span> boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, <span class="fu">median</span>(TRMOBSCI, <span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">by =</span> M_YEAR], <span class="fu">aes</span>(<span class="at">x =</span> M_YEAR, <span class="at">y =</span> V1), <span class="at">linewidth =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">&quot;dodgerblue4&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">2</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">minor_breaks =</span> <span class="fu">waiver</span>(), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">2005</span>, <span class="dv">2020</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2005</span>, <span class="dv">2020</span>, <span class="at">by =</span> <span class="dv">5</span>)) <span class="sc">+</span> </span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Year&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Abundance Incices (Log/Log(10))&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="fu">paste</span>(s_sp, bms_id, <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a>plot_col</span></code></pre></div>
+<p><img src="site_indices_files/figure-html/collated_index_figure2-1.png" width="672" /></p>
+<p>Now, let’s center the index on the first year and scale it to 100
+instead of 2, using 10^2 = 100 (line #10 &gt; “boot_ests[, TRMOBSCI :=
+10^(LOGDENSITY - first_year_log0 + 2)]”). Note that we have also changed
+the intercept to 100 in the figure. This may be easier to interpret as
+we start at 100 and have an increase or decrease relative to this
+baseline.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>bms_id <span class="ot">&lt;-</span> <span class="st">&quot;NLBMS&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>co_index_boot <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(<span class="st">&quot;bms_workshop_data&quot;</span>, <span class="fu">paste</span>( <span class="fu">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, s_sp), bms_id, <span class="st">&quot;co_index_boot.rds&quot;</span>, <span class="at">sep=</span><span class="st">&quot;_&quot;</span>)))</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>boot0 <span class="ot">&lt;-</span> co_index_boot[ , <span class="fu">mean</span>(COL_INDEX, <span class="at">na.rm=</span><span class="cn">TRUE</span>), by <span class="ot">=</span> M_YEAR]</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>boot0[, LOGDENSITY0 <span class="sc">:=</span> <span class="fu">log</span>(V1) <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">10</span>)]</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>boot0[, first_year_log0 <span class="sc">:=</span> boot0[<span class="fu">order</span>(M_YEAR), LOGDENSITY0][<span class="dv">1</span>]]</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co"># Add mean of BOOTi == 0 (real data) to all data</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>boot_ests <span class="ot">&lt;-</span> <span class="fu">merge</span>(co_index_boot, boot0[, .(M_YEAR, first_year_log0)],</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;M_YEAR&quot;</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>    )</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>boot_ests[, LOGDENSITY <span class="sc">:=</span> <span class="fu">log</span>(COL_INDEX) <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">10</span>)]</span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>boot_ests[, TRMOBSCI <span class="sc">:=</span> <span class="dv">10</span><span class="sc">^</span>(LOGDENSITY <span class="sc">-</span> first_year_log0 <span class="sc">+</span> <span class="dv">2</span>)]</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>boot_ests[, TRMOBSCILOW <span class="sc">:=</span> <span class="fu">quantile</span>(TRMOBSCI, <span class="fl">0.025</span>), by <span class="ot">=</span> M_YEAR]</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>boot_ests[, TRMOBSCIUPP <span class="sc">:=</span> <span class="fu">quantile</span>(TRMOBSCI, <span class="fl">0.975</span>), by <span class="ot">=</span> M_YEAR]</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>ylim_ <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">floor</span>(<span class="fu">range</span>(boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, TRMOBSCI]))),</span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>           <span class="fu">max</span>(<span class="fu">ceiling</span>(<span class="fu">range</span>(boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, TRMOBSCI]))))</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a></span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>plot_col <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, ], <span class="fu">aes</span>(<span class="at">x =</span> M_YEAR, <span class="at">y =</span> TRMOBSCI)) <span class="sc">+</span> </span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> <span class="fu">ylim</span>(ylim_) <span class="sc">+</span></span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">data =</span> boot_ests[TRMOBSCI <span class="sc">&lt;=</span> TRMOBSCIUPP <span class="sc">&amp;</span> TRMOBSCI <span class="sc">&gt;=</span> TRMOBSCILOW, <span class="fu">median</span>(TRMOBSCI, <span class="at">na.rm=</span><span class="cn">TRUE</span>), <span class="at">by =</span> M_YEAR], <span class="fu">aes</span>(<span class="at">x =</span> M_YEAR, <span class="at">y =</span> V1), <span class="at">linewidth =</span> <span class="dv">1</span>, <span class="at">colour =</span> <span class="st">&quot;dodgerblue4&quot;</span>) <span class="sc">+</span></span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">100</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">minor_breaks =</span> <span class="fu">waiver</span>(), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">2005</span>, <span class="dv">2020</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2005</span>, <span class="dv">2020</span>, <span class="at">by =</span> <span class="dv">5</span>)) <span class="sc">+</span> </span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Year&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Abundance Incices (first year set to 100)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="fu">paste</span>(s_sp, bms_id, <span class="at">sep =</span> <span class="st">&quot; &quot;</span>))</span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>plot_col</span></code></pre></div>
+<p><img src="site_indices_files/figure-html/collated_index_figure3-1.png" width="672" /></p>
 </div>
 
 

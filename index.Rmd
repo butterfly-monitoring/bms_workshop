@@ -57,10 +57,10 @@ install.packages("ggplot2")
 install.packages("reshape2")
 install.packages("plyr")
 install.packages("sf")
-install.packages("raster")
-install.packages("rasterVis")
+install.packages("terra")
 install.packages("tmap")
 install.packages("DT")
+install.packages("mapview")
 ## rbms from GitHub
 devtools::install_github("RetoSchmucki/rbms")
 
@@ -71,6 +71,10 @@ devtools::install_github("RetoSchmucki/rbms")
 <a href="https://filedn.com/l4iF16owVCHBm81sGhdrcpX/bms_workshop_data.zip"><b>WORKSHOP DATA</b></a>
 
 <br>
+
+### Update
+Since 2020, the scripts have been updated to replace the raster package and ensure that everything is working with the latest version of R. The package `terra` is now used instead of `raster`. 
+This integrates the contribution send by <a href="https://github.com/RetoSchmucki/rbms/issues/23#issue-2140271598" target="gtp732".
 
 ### Reading
 
